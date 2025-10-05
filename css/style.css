@@ -1,1 +1,468 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: #0f0f0f;
+    color: #ffffff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Навигация */
+.navbar {
+    background: rgba(15, 15, 15, 0.95);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 1px solid #333;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4ecdc4;
+}
+
+.nav-logo i {
+    font-size: 1.8rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #ffffff;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #4ecdc4;
+}
+
+.login-btn {
+    background: transparent;
+    border: 1px solid #4ecdc4;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.register-btn {
+    background: #4ecdc4;
+    color: #0f0f0f !important;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Герой-секция */
+.hero {
+    padding: 120px 0 80px;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+}
+
+.hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: #cccccc;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn {
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn.primary {
+    background: #4ecdc4;
+    color: #0f0f0f;
+    font-weight: bold;
+}
+
+.btn.secondary {
+    background: transparent;
+    color: #4ecdc4;
+    border: 2px solid #4ecdc4;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(78, 205, 196, 0.3);
+}
+
+/* Предпросмотр редактора */
+.editor-preview {
+    background: #1e1e1e;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+}
+
+.editor-header {
+    background: #2d2d2d;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+}
+
+.editor-dots {
+    display: flex;
+    gap: 6px;
+}
+
+.editor-dots span {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff5f57;
+}
+
+.editor-dots span:nth-child(2) {
+    background: #ffbd2e;
+}
+
+.editor-dots span:nth-child(3) {
+    background: #28ca42;
+}
+
+.editor-title {
+    color: #cccccc;
+    font-family: monospace;
+}
+
+.online-users {
+    display: flex;
+    gap: 5px;
+}
+
+.user-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.editor-content {
+    padding: 1.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.editor-content pre {
+    margin: 0;
+    color: #d4d4d4;
+}
+
+/* Секции */
+section {
+    padding: 80px 0;
+}
+
+.features {
+    background: #1a1a1a;
+}
+
+.features h2, .how-it-works h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #ffffff;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: #252525;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    border: 1px solid #333;
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: #4ecdc4;
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+}
+
+.feature-card h3 {
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.feature-card p {
+    color: #cccccc;
+}
+
+/* Шаги */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.step {
+    text-align: center;
+    padding: 2rem;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 0 auto 1rem;
+}
+
+.step h3 {
+    margin-bottom: 1rem;
+    color: #ffffff;
+}
+
+.step p {
+    color: #cccccc;
+}
+
+/* Футер */
+.footer {
+    background: #0f0f0f;
+    border-top: 1px solid #333;
+    padding: 3rem 0 1rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-section h3, .footer-section h4 {
+    margin-bottom: 1rem;
+    color: #4ecdc4;
+}
+
+.footer-section a {
+    display: block;
+    color: #cccccc;
+    text-decoration: none;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s;
+}
+
+.footer-section a:hover {
+    color: #4ecdc4;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid #333;
+    color: #666;
+}
+
+/* Модальные окна */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #1a1a1a;
+    margin: 5% auto;
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    border: 1px solid #333;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
+.close:hover {
+    color: #4ecdc4;
+}
+
+.modal h2 {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #ffffff;
+}
+
+.modal input {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.modal input:focus {
+    outline: none;
+    border-color: #4ecdc4;
+}
+
+.auth-divider {
+    text-align: center;
+    margin: 1rem 0;
+    color: #666;
+    position: relative;
+}
+
+.auth-divider::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: #333;
+}
+
+.auth-divider::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 45%;
+    height: 1px;
+    background: #333;
+}
+
+.social-btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    background: #252525;
+    color: #ffffff;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.social-btn:hover {
+    background: #2d2d2d;
+    border-color: #4ecdc4;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .nav-links {
+        display: none;
+    }
+}
