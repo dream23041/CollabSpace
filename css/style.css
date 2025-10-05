@@ -466,3 +466,168 @@ section {
         display: none;
     }
 }
+
+/* Добавьте эти стили в существующий CSS файл */
+
+/* Формы */
+.form-group {
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 1rem;
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4ecdc4;
+}
+
+.form-group input.error {
+    border-color: #ff6b6b;
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    min-height: 1rem;
+}
+
+.full-width {
+    width: 100%;
+}
+
+/* Чекбокс */
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin-top: 0.2rem;
+}
+
+.checkbox-group label {
+    font-size: 0.9rem;
+    color: #cccccc;
+    line-height: 1.4;
+}
+
+.checkbox-group a {
+    color: #4ecdc4;
+    text-decoration: none;
+}
+
+.checkbox-group a:hover {
+    text-decoration: underline;
+}
+
+/* Ссылки в формах */
+.auth-links {
+    margin-top: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.auth-links a {
+    color: #4ecdc4;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.auth-links a:hover {
+    text-decoration: underline;
+}
+
+.auth-links span {
+    color: #cccccc;
+    font-size: 0.9rem;
+}
+
+/* Сообщения об успехе */
+.success-message {
+    background: #28a745;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+/* Индикатор загрузки */
+.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #ffffff;
+    border-top: 2px solid #4ecdc4;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Парольная сложность */
+.password-strength {
+    margin-top: 0.5rem;
+}
+
+.strength-bar {
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
+    margin-bottom: 0.3rem;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: all 0.3s;
+}
+
+.strength-text {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.strength-weak .strength-fill {
+    width: 33%;
+    background: #ff6b6b;
+}
+
+.strength-medium .strength-fill {
+    width: 66%;
+    background: #ffbd2e;
+}
+
+.strength-strong .strength-fill {
+    width: 100%;
+    background: #28ca42;
+}
