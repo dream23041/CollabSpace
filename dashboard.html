@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - CollabSpace</title>
+    <title>Личный кабинет - CollabSpace</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ui.css">
     <link rel="stylesheet" href="css/dashboard.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -15,26 +17,8 @@
                 <i class="fas fa-code"></i>
                 <span>CollabSpace</span>
             </div>
-            <div class="nav-user">
-                <div class="user-info">
-                    <span class="username" id="usernameDisplay">Пользователь</span>
-                    <div class="user-menu">
-                        <button class="user-btn" id="userMenuBtn">
-                            <i class="fas fa-user"></i>
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-menu" id="userDropdown">
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-cog"></i>
-                                Настройки
-                            </a>
-                            <a href="#" class="dropdown-item" id="logoutBtn">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Выйти
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div class="nav-links" id="navLinks">
+                <!-- Заполняется JavaScript -->
             </div>
         </div>
     </nav>
@@ -43,13 +27,23 @@
     <div class="dashboard-container">
         <!-- Боковая панель -->
         <aside class="sidebar">
+            <div class="user-profile-sidebar">
+                <div class="user-avatar">
+                    <img src="https://via.placeholder.com/60" alt="Аватар" id="userAvatarImg">
+                </div>
+                <div class="user-info">
+                    <h3 id="sidebarUsername">Пользователь</h3>
+                    <span class="user-status online">Online</span>
+                </div>
+            </div>
+
             <div class="sidebar-section">
                 <h3>Рабочие пространства</h3>
-                <button class="sidebar-btn active">
+                <button class="sidebar-btn active" data-workspace="main">
                     <i class="fas fa-home"></i>
                     Главное пространство
                 </button>
-                <button class="sidebar-btn">
+                <button class="sidebar-btn" data-workspace="new">
                     <i class="fas fa-plus"></i>
                     Новое пространство
                 </button>
@@ -57,27 +51,30 @@
 
             <div class="sidebar-section">
                 <h3>Проекты</h3>
-                <div class="project-list">
-                    <div class="project-item active">
-                        <i class="fas fa-folder"></i>
-                        <span>Мой первый проект</span>
-                    </div>
-                    <div class="project-item">
-                        <i class="fas fa-folder"></i>
-                        <span>Документация</span>
-                    </div>
+                <div class="project-list" id="projectList">
+                    <!-- Проекты будут добавляться через JS -->
                 </div>
                 <button class="sidebar-btn" id="createProjectBtn">
                     <i class="fas fa-plus"></i>
                     Новый проект
                 </button>
             </div>
+
+            <div class="sidebar-section">
+                <h3>Недавние файлы</h3>
+                <div class="recent-files" id="recentFiles">
+                    <!-- Недавние файлы будут добавляться через JS -->
+                </div>
+            </div>
         </aside>
 
         <!-- Основная область -->
         <main class="main-content">
             <div class="content-header">
-                <h1>Главное пространство</h1>
+                <div class="header-left">
+                    <h1 id="workspaceTitle">Главное пространство</h1>
+                    <p class="workspace-description">Ваше основное рабочее пространство</p>
+                </div>
                 <div class="header-actions">
                     <button class="btn primary" id="createFileBtn">
                         <i class="fas fa-plus"></i>
@@ -90,85 +87,95 @@
                 </div>
             </div>
 
-            <!-- Файлы и папки -->
-            <div class="files-grid">
-                <div class="file-card folder">
-                    <div class="file-icon">
-                        <i class="fas fa-folder"></i>
+            <!-- Статистика -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-code"></i>
                     </div>
-                    <div class="file-info">
-                        <h3>Документы</h3>
-                        <span>5 файлов</span>
-                    </div>
-                    <div class="file-actions">
-                        <button class="action-btn">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
+                    <div class="stat-info">
+                        <h3 id="filesCount">0</h3>
+                        <span>Файлов</span>
                     </div>
                 </div>
-
-                <div class="file-card file">
-                    <div class="file-icon">
-                        <i class="fab fa-js-square"></i>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-project-diagram"></i>
                     </div>
-                    <div class="file-info">
-                        <h3>script.js</h3>
-                        <span>JavaScript · 2 KB</span>
-                    </div>
-                    <div class="file-actions">
-                        <button class="action-btn">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
+                    <div class="stat-info">
+                        <h3 id="projectsCount">0</h3>
+                        <span>Проектов</span>
                     </div>
                 </div>
-
-                <div class="file-card file">
-                    <div class="file-icon">
-                        <i class="fab fa-html5"></i>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
                     </div>
-                    <div class="file-info">
-                        <h3>index.html</h3>
-                        <span>HTML · 1 KB</span>
-                    </div>
-                    <div class="file-actions">
-                        <button class="action-btn">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
+                    <div class="stat-info">
+                        <h3 id="collaboratorsCount">1</h3>
+                        <span>Участников</span>
                     </div>
                 </div>
-
-                <div class="file-card file">
-                    <div class="file-icon">
-                        <i class="fab fa-css3-alt"></i>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
                     </div>
-                    <div class="file-info">
-                        <h3>styles.css</h3>
-                        <span>CSS · 3 KB</span>
-                    </div>
-                    <div class="file-actions">
-                        <button class="action-btn">
-                            <i class="fas fa-ellipsis-v"></i>
-                        </button>
+                    <div class="stat-info">
+                        <h3 id="lastActive">Сегодня</h3>
+                        <span>Активность</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Пустое состояние -->
-            <div class="empty-state" id="emptyState">
-                <div class="empty-icon">
-                    <i class="fas fa-file-code"></i>
+            <!-- Быстрые действия -->
+            <div class="quick-actions">
+                <h2>Быстрые действия</h2>
+                <div class="actions-grid">
+                    <button class="action-card" data-action="create-file">
+                        <div class="action-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Текстовый документ</h3>
+                        <p>Создать новый текстовый файл</p>
+                    </button>
+                    <button class="action-card" data-action="create-code">
+                        <div class="action-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Файл кода</h3>
+                        <p>Создать файл с подсветкой синтаксиса</p>
+                    </button>
+                    <button class="action-card" data-action="create-folder">
+                        <div class="action-icon">
+                            <i class="fas fa-folder"></i>
+                        </div>
+                        <h3>Папка</h3>
+                        <p>Создать новую папку для организации</p>
+                    </button>
+                    <button class="action-card" data-action="import-files">
+                        <div class="action-icon">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <h3>Импорт файлов</h3>
+                        <p>Загрузить файлы с компьютера</p>
+                    </button>
                 </div>
-                <h2>Здесь пока пусто</h2>
-                <p>Создайте свой первый файл чтобы начать работу</p>
-                <button class="btn primary" id="createFirstFileBtn">
-                    <i class="fas fa-plus"></i>
-                    Создать файл
-                </button>
+            </div>
+
+            <!-- Недавние файлы -->
+            <div class="recent-section">
+                <div class="section-header">
+                    <h2>Недавние файлы</h2>
+                    <a href="#" class="view-all">Показать все</a>
+                </div>
+                <div class="files-table" id="recentFilesTable">
+                    <!-- Файлы будут добавляться через JS -->
+                </div>
             </div>
         </main>
     </div>
 
-    <!-- Модальное окно создания файла -->
+    <!-- Модальные окна -->
     <div id="createFileModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeCreateFile">&times;</span>
@@ -220,20 +227,17 @@
                     <label>Проект</label>
                     <select id="fileProject">
                         <option value="main">Главное пространство</option>
-                        <option value="project1">Мой первый проект</option>
-                        <option value="project2">Документация</option>
                     </select>
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn secondary" onclick="closeModal('createFileModal')">Отмена</button>
+                    <button type="button" class="btn secondary" id="cancelCreateFile">Отмена</button>
                     <button type="submit" class="btn primary">Создать файл</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Модальное окно создания проекта -->
     <div id="createProjectModal" class="modal">
         <div class="modal-content">
             <span class="close" id="closeCreateProject">&times;</span>
@@ -250,14 +254,64 @@
                 </div>
 
                 <div class="modal-actions">
-                    <button type="button" class="btn secondary" onclick="closeModal('createProjectModal')">Отмена</button>
+                    <button type="button" class="btn secondary" id="cancelCreateProject">Отмена</button>
                     <button type="submit" class="btn primary">Создать проект</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeProfileModal">&times;</span>
+            <h2>Профиль пользователя</h2>
+            <div class="profile-content">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img src="https://via.placeholder.com/100" alt="Аватар" id="profileAvatarImg">
+                        <button class="change-avatar-btn">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="profileUsername">Пользователь</h3>
+                        <p id="profileEmail">email@example.com</p>
+                        <span class="member-since">Участник с <span id="memberSince">2024</span></span>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <strong id="profileFilesCount">0</strong>
+                        <span>Файлов</span>
+                    </div>
+                    <div class="profile-stat">
+                        <strong id="profileProjectsCount">0</strong>
+                        <span>Проектов</span>
+                    </div>
+                    <div class="profile-stat">
+                        <strong id="profileCollaborationsCount">0</strong>
+                        <span>Коллабораций</span>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button class="btn secondary" id="editProfileBtn">
+                        <i class="fas fa-edit"></i>
+                        Редактировать профиль
+                    </button>
+                    <button class="btn secondary" id="changePasswordBtn">
+                        <i class="fas fa-key"></i>
+                        Сменить пароль
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
 </html>
