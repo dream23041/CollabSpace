@@ -315,9 +315,40 @@
         </div>
     </div>
 
+    <!-- Админ панель -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <div class="admin-panel-content">
+            <h3>Админ панель</h3>
+            <div class="admin-actions">
+                <button class="admin-btn" onclick="AdminTools.showAllUsers()">
+                    <i class="fas fa-users"></i>
+                    Показать всех пользователей
+                </button>
+                <button class="admin-btn" onclick="AdminTools.createTestUser()">
+                    <i class="fas fa-user-plus"></i>
+                    Создать тестового пользователя
+                </button>
+                <button class="admin-btn" onclick="AdminTools.clearDatabase()">
+                    <i class="fas fa-trash"></i>
+                    Очистить базу данных
+                </button>
+                <button class="admin-btn" onclick="AdminTools.exportDatabase()">
+                    <i class="fas fa-download"></i>
+                    Экспорт базы данных
+                </button>
+                <button class="admin-btn" onclick="AdminTools.closeAdminPanel()">
+                    <i class="fas fa-times"></i>
+                    Закрыть панель
+                </button>
+            </div>
+            <div id="adminOutput" class="admin-output"></div>
+        </div>
+    </div>
+
     <script src="js/storage.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/dashboard.js"></script>
+    <script src="js/admin.js"></script>
 </body>
 </html>
