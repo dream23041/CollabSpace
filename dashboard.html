@@ -1,1 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - CollabSpace</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-code"></i>
+                <span>CollabSpace</span>
+            </div>
+            <div class="nav-user">
+                <div class="user-info">
+                    <span class="username" id="usernameDisplay">Пользователь</span>
+                    <div class="user-menu">
+                        <button class="user-btn" id="userMenuBtn">
+                            <i class="fas fa-user"></i>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-menu" id="userDropdown">
+                            <a href="#" class="dropdown-item">
+                                <i class="fas fa-cog"></i>
+                                Настройки
+                            </a>
+                            <a href="#" class="dropdown-item" id="logoutBtn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Выйти
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Основной контент -->
+    <div class="dashboard-container">
+        <!-- Боковая панель -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Рабочие пространства</h3>
+                <button class="sidebar-btn active">
+                    <i class="fas fa-home"></i>
+                    Главное пространство
+                </button>
+                <button class="sidebar-btn">
+                    <i class="fas fa-plus"></i>
+                    Новое пространство
+                </button>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Проекты</h3>
+                <div class="project-list">
+                    <div class="project-item active">
+                        <i class="fas fa-folder"></i>
+                        <span>Мой первый проект</span>
+                    </div>
+                    <div class="project-item">
+                        <i class="fas fa-folder"></i>
+                        <span>Документация</span>
+                    </div>
+                </div>
+                <button class="sidebar-btn" id="createProjectBtn">
+                    <i class="fas fa-plus"></i>
+                    Новый проект
+                </button>
+            </div>
+        </aside>
+
+        <!-- Основная область -->
+        <main class="main-content">
+            <div class="content-header">
+                <h1>Главное пространство</h1>
+                <div class="header-actions">
+                    <button class="btn primary" id="createFileBtn">
+                        <i class="fas fa-plus"></i>
+                        Создать файл
+                    </button>
+                    <button class="btn secondary" id="inviteBtn">
+                        <i class="fas fa-user-plus"></i>
+                        Пригласить
+                    </button>
+                </div>
+            </div>
+
+            <!-- Файлы и папки -->
+            <div class="files-grid">
+                <div class="file-card folder">
+                    <div class="file-icon">
+                        <i class="fas fa-folder"></i>
+                    </div>
+                    <div class="file-info">
+                        <h3>Документы</h3>
+                        <span>5 файлов</span>
+                    </div>
+                    <div class="file-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="file-card file">
+                    <div class="file-icon">
+                        <i class="fab fa-js-square"></i>
+                    </div>
+                    <div class="file-info">
+                        <h3>script.js</h3>
+                        <span>JavaScript · 2 KB</span>
+                    </div>
+                    <div class="file-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="file-card file">
+                    <div class="file-icon">
+                        <i class="fab fa-html5"></i>
+                    </div>
+                    <div class="file-info">
+                        <h3>index.html</h3>
+                        <span>HTML · 1 KB</span>
+                    </div>
+                    <div class="file-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="file-card file">
+                    <div class="file-icon">
+                        <i class="fab fa-css3-alt"></i>
+                    </div>
+                    <div class="file-info">
+                        <h3>styles.css</h3>
+                        <span>CSS · 3 KB</span>
+                    </div>
+                    <div class="file-actions">
+                        <button class="action-btn">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Пустое состояние -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">
+                    <i class="fas fa-file-code"></i>
+                </div>
+                <h2>Здесь пока пусто</h2>
+                <p>Создайте свой первый файл чтобы начать работу</p>
+                <button class="btn primary" id="createFirstFileBtn">
+                    <i class="fas fa-plus"></i>
+                    Создать файл
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Модальное окно создания файла -->
+    <div id="createFileModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeCreateFile">&times;</span>
+            <h2>Создать новый файл</h2>
+            <form id="createFileForm">
+                <div class="form-group">
+                    <label>Название файла</label>
+                    <input type="text" id="fileName" placeholder="Введите название файла" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Тип файла</label>
+                    <div class="file-type-grid">
+                        <div class="file-type-option" data-type="javascript">
+                            <i class="fab fa-js-square"></i>
+                            <span>JavaScript</span>
+                            <small>.js</small>
+                        </div>
+                        <div class="file-type-option" data-type="html">
+                            <i class="fab fa-html5"></i>
+                            <span>HTML</span>
+                            <small>.html</small>
+                        </div>
+                        <div class="file-type-option" data-type="css">
+                            <i class="fab fa-css3-alt"></i>
+                            <span>CSS</span>
+                            <small>.css</small>
+                        </div>
+                        <div class="file-type-option" data-type="text">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Текстовый документ</span>
+                            <small>.txt</small>
+                        </div>
+                        <div class="file-type-option" data-type="markdown">
+                            <i class="fas fa-markdown"></i>
+                            <span>Markdown</span>
+                            <small>.md</small>
+                        </div>
+                        <div class="file-type-option" data-type="json">
+                            <i class="fas fa-code"></i>
+                            <span>JSON</span>
+                            <small>.json</small>
+                        </div>
+                    </div>
+                    <input type="hidden" id="fileType" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Проект</label>
+                    <select id="fileProject">
+                        <option value="main">Главное пространство</option>
+                        <option value="project1">Мой первый проект</option>
+                        <option value="project2">Документация</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn secondary" onclick="closeModal('createFileModal')">Отмена</button>
+                    <button type="submit" class="btn primary">Создать файл</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно создания проекта -->
+    <div id="createProjectModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeCreateProject">&times;</span>
+            <h2>Создать новый проект</h2>
+            <form id="createProjectForm">
+                <div class="form-group">
+                    <label>Название проекта</label>
+                    <input type="text" id="projectName" placeholder="Введите название проекта" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Описание</label>
+                    <textarea id="projectDescription" placeholder="Описание проекта (необязательно)"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn secondary" onclick="closeModal('createProjectModal')">Отмена</button>
+                    <button type="submit" class="btn primary">Создать проект</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
