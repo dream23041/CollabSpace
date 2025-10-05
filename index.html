@@ -305,50 +305,58 @@ function welcome() {
                 alert('Восстановление пароля будет доступно позже');
             });
 
-            // Обработка формы входа
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('loginUsername').value;
-                const password = document.getElementById('loginPassword').value;
+        // Обработка формы входа
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
                 
+            try {
                 if (username && password) {
+                    Auth.login(username, password);
                     alert('Вход выполнен! Добро пожаловать, ' + username + '!');
                     closeModal('loginModal');
-                    // В реальном приложении здесь будет редирект на dashboard
+                    // Редирект на dashboard
                     window.location.href = 'dashboard.html';
-                } else {
-                    alert('Заполните все поля');
-                }
-            });
+            } else {
+                throw new Error('Заполните все поля');
+            }
+        } catch (error) {
+            alert('Ошибка входа: ' + error.message);
+        }
+        });
 
-            // Обработка формы регистрации
-            document.getElementById('registerForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = document.getElementById('registerUsername').value;
-                const email = document.getElementById('registerEmail').value;
-                const password = document.getElementById('registerPassword').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                const agreeTerms = document.getElementById('agreeTerms').checked;
-                
+        // Обработка формы регистрации
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+    
+            try {
                 if (password !== confirmPassword) {
-                    alert('Пароли не совпадают!');
-                    return;
+                    throw new Error('Пароли не совпадают!');
                 }
-                
+        
                 if (!agreeTerms) {
-                    alert('Необходимо согласие с условиями использования');
-                    return;
+                    throw new Error('Необходимо согласие с условиями использования');
                 }
-                
+        
                 if (username && email && password) {
+                    Auth.register(username, email, password);
                     alert('Регистрация успешна! Добро пожаловать, ' + username + '!');
                     closeModal('registerModal');
-                    // В реальном приложении здесь будет редирект на dashboard
+                    // Редирект на dashboard
                     window.location.href = 'dashboard.html';
                 } else {
-                    alert('Заполните все поля');
+                    throw new Error('Заполните все поля');
                 }
-            });
+            } catch (error) {
+                alert('Ошибка регистрации: ' + error.message);
+            }
+        });
 
             // Закрытие модальных окон при клике вне
             window.addEventListener('click', function(e) {
