@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CollabSpace - Совместное редактирование в реальном времени</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ui.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
@@ -15,11 +16,11 @@
                 <i class="fas fa-code"></i>
                 <span>CollabSpace</span>
             </div>
-            <div class="nav-links" id="navLinks">
+            <div class="nav-links">
                 <a href="#features">Возможности</a>
                 <a href="#about">О проекте</a>
-                <a href="javascript:void(0)" class="login-btn" id="loginBtn">Войти</a>
-                <a href="javascript:void(0)" class="register-btn" id="registerBtn">Регистрация</a>
+                <button class="login-btn" onclick="showLogin()">Войти</button>
+                <button class="register-btn" onclick="showRegister()">Регистрация</button>
             </div>
         </div>
     </nav>
@@ -31,8 +32,8 @@
                 <h1>Редактируйте код и документы вместе в реальном времени</h1>
                 <p>Совместная работа над проектами с друзьями и коллегами. Текстовый редактор, редактор кода и чат в одном месте.</p>
                 <div class="hero-buttons">
-                    <button class="btn primary" id="startFreeBtn">Начать бесплатно</button>
-                    <button class="btn secondary" id="demoBtn">Посмотреть демо</button>
+                    <button class="btn primary" onclick="showRegister()">Начать бесплатно</button>
+                    <button class="btn secondary" onclick="showDemo()">Посмотреть демо</button>
                 </div>
             </div>
             <div class="hero-image">
@@ -105,6 +106,35 @@ function welcome() {
         </div>
     </section>
 
+    <!-- Как это работает -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>Как начать работать</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Создайте аккаунт</h3>
+                    <p>Быстрая регистрация с уникальным именем пользователя</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Создайте workspace</h3>
+                    <p>Новое рабочее пространство для вашего проекта</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Пригласите друзей</h3>
+                    <p>Отправьте ссылку-приглашение вашей команде</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Начните творить</h3>
+                    <p>Создавайте документы, пишите код, общайтесь в чате</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Футер -->
     <footer class="footer">
         <div class="container">
@@ -135,12 +165,12 @@ function welcome() {
     <!-- Модальные окна -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span class="close" id="closeLogin">&times;</span>
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
             <h2>Вход в CollabSpace</h2>
             <form id="loginForm">
                 <div class="form-group">
-                    <input type="email" id="loginEmail" placeholder="Email" required>
-                    <div class="error-message" id="loginEmailError"></div>
+                    <input type="text" id="loginUsername" placeholder="Имя пользователя" required>
+                    <div class="error-message" id="loginUsernameError"></div>
                 </div>
                 <div class="form-group">
                     <input type="password" id="loginPassword" placeholder="Пароль" required>
@@ -149,28 +179,30 @@ function welcome() {
                 <button type="submit" class="btn primary full-width">Войти</button>
             </form>
             <div class="auth-links">
-                <a href="#" id="forgotPasswordLink">Забыли пароль?</a>
-                <span>Нет аккаунта? <a href="#" id="switchToRegister">Зарегистрироваться</a></span>
+                <a href="#" onclick="showForgotPassword()">Забыли пароль?</a>
+                <span>Нет аккаунта? <a href="#" onclick="switchToRegister()">Зарегистрироваться</a></span>
             </div>
         </div>
     </div>
 
     <div id="registerModal" class="modal">
         <div class="modal-content">
-            <span class="close" id="closeRegister">&times;</span>
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
             <h2>Регистрация в CollabSpace</h2>
             <form id="registerForm">
                 <div class="form-group">
                     <input type="text" id="registerUsername" placeholder="Имя пользователя" required>
                     <div class="error-message" id="usernameError"></div>
+                    <div class="field-hint">От 3 до 20 символов (буквы, цифры, _)</div>
                 </div>
                 <div class="form-group">
-                    <input type="email" id="registerEmail" placeholder="Email" required>
+                    <input type="email" id="registerEmail" placeholder="Email (для восстановления)" required>
                     <div class="error-message" id="emailError"></div>
                 </div>
                 <div class="form-group">
                     <input type="password" id="registerPassword" placeholder="Пароль" required>
                     <div class="error-message" id="passwordError"></div>
+                    <div class="field-hint">Минимум 6 символов</div>
                 </div>
                 <div class="form-group">
                     <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" required>
@@ -184,31 +216,160 @@ function welcome() {
                 <button type="submit" class="btn primary full-width">Зарегистрироваться</button>
             </form>
             <div class="auth-links">
-                <span>Уже есть аккаунт? <a href="#" id="switchToLogin">Войти</a></span>
+                <span>Уже есть аккаунт? <a href="#" onclick="switchToLogin()">Войти</a></span>
             </div>
         </div>
     </div>
 
     <div id="forgotPasswordModal" class="modal">
         <div class="modal-content">
-            <span class="close" id="closeForgotPassword">&times;</span>
+            <span class="close" onclick="closeModal('forgotPasswordModal')">&times;</span>
             <h2>Восстановление пароля</h2>
             <form id="forgotPasswordForm">
                 <div class="form-group">
-                    <input type="email" id="forgotEmail" placeholder="Введите ваш Email" required>
-                    <div class="error-message" id="forgotEmailError"></div>
+                    <input type="text" id="forgotUsername" placeholder="Введите ваше имя пользователя" required>
+                    <div class="error-message" id="forgotUsernameError"></div>
                 </div>
                 <button type="submit" class="btn primary full-width">Отправить ссылку для сброса</button>
             </form>
             <div class="auth-links">
-                <a href="#" id="backToLogin">Вернуться ко входу</a>
+                <a href="#" onclick="switchToLogin()">Вернуться ко входу</a>
             </div>
         </div>
     </div>
 
-    <!-- Подключаем JS файлы -->
     <script src="js/storage.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
+    <script>
+        // Простые функции для модальных окон
+        function showLogin() {
+            closeAllModals();
+            document.getElementById('loginModal').style.display = 'block';
+        }
+
+        function showRegister() {
+            closeAllModals();
+            document.getElementById('registerModal').style.display = 'block';
+        }
+
+        function showForgotPassword() {
+            closeAllModals();
+            document.getElementById('forgotPasswordModal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function closeAllModals() {
+            const modals = document.getElementsByClassName('modal');
+            for (let modal of modals) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function switchToRegister() {
+            closeAllModals();
+            showRegister();
+        }
+
+        function switchToLogin() {
+            closeAllModals();
+            showLogin();
+        }
+
+        function showDemo() {
+            alert('Демо-режим будет доступен после реализации основного функционала!');
+        }
+
+        // Закрытие модального окна при клике вне его
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let modal of modals) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        // Обработка форм
+        document.addEventListener('DOMContentLoaded', function() {
+            // Обработка входа
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                if (username && password) {
+                    // Используем нашу систему аутентификации
+                    try {
+                        const user = Auth.login(username, password);
+                        alert('Вход выполнен успешно! Добро пожаловать, ' + user.username + '!');
+                        window.location.href = 'dashboard.html';
+                    } catch (error) {
+                        alert('Ошибка: ' + error.message);
+                    }
+                } else {
+                    alert('Заполните все поля');
+                }
+            });
+
+            // Обработка регистрации
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('registerUsername').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const agreeTerms = document.getElementById('agreeTerms').checked;
+                
+                if (password !== confirmPassword) {
+                    alert('Пароли не совпадают!');
+                    return;
+                }
+                
+                if (!agreeTerms) {
+                    alert('Необходимо согласие с условиями использования');
+                    return;
+                }
+                
+                if (username && email && password) {
+                    // Используем нашу систему аутентификации
+                    try {
+                        const user = Auth.register(username, email, password);
+                        alert('Регистрация выполнена успешно! Добро пожаловать, ' + user.username + '!');
+                        window.location.href = 'dashboard.html';
+                    } catch (error) {
+                        alert('Ошибка: ' + error.message);
+                    }
+                } else {
+                    alert('Заполните все поля');
+                }
+            });
+
+            // Обработка восстановления пароля
+            document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('forgotUsername').value;
+                alert('Ссылка для сброса пароля отправлена для пользователя: ' + username);
+                closeModal('forgotPasswordModal');
+            });
+        });
+
+        // Плавная прокрутка для якорных ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
