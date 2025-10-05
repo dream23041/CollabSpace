@@ -658,3 +658,99 @@ section {
 .nav-links button:hover {
     transform: translateY(-2px);
 }
+
+
+/* Подсказки для полей формы */
+.field-hint {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+/* Улучшенные стили для форм */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-group input:focus {
+    border-color: #4ecdc4;
+    box-shadow: 0 0 0 2px rgba(78, 205, 196, 0.1);
+}
+
+/* Стили для успешной валидации */
+.form-group.success input {
+    border-color: #28ca42;
+}
+
+.form-group.success .field-hint {
+    color: #28ca42;
+}
+
+.form-group.error input {
+    border-color: #ff6b6b;
+}
+
+.form-group.error .field-hint {
+    color: #ff6b6b;
+}
+
+/* Анимация появления ошибок */
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+    animation: slideDown 0.3s ease-in-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Стили для чекбокса */
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid #333;
+    transition: all 0.3s;
+}
+
+.checkbox-group:focus-within {
+    border-color: #4ecdc4;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-top: 0.2rem;
+    accent-color: #4ecdc4;
+}
+
+.checkbox-group label {
+    font-size: 0.9rem;
+    color: #cccccc;
+    line-height: 1.4;
+    flex: 1;
+}
+
+.checkbox-group a {
+    color: #4ecdc4;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.checkbox-group a:hover {
+    color: #45b7d1;
+    text-decoration: underline;
+}
