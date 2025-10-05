@@ -1,1 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncEdit - Совместное редактирование в реальном времени</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-code"></i>
+                <span>SyncEdit</span>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Возможности</a>
+                <a href="#about">О проекте</a>
+                <a href="#" class="login-btn">Войти</a>
+                <a href="#" class="register-btn">Регистрация</a>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Герой-секция -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Редактируйте код и документы вместе в реальном времени</h1>
+                <p>Совместная работа над проектами с друзьями и коллегами. Текстовый редактор, редактор кода и чат в одном месте.</p>
+                <div class="hero-buttons">
+                    <button class="btn primary" onclick="showRegister()">Начать бесплатно</button>
+                    <button class="btn secondary" onclick="showDemo()">Посмотреть демо</button>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="editor-preview">
+                    <div class="editor-header">
+                        <div class="editor-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="editor-title">document.js</div>
+                        <div class="online-users">
+                            <span class="user-dot" style="background: #ff6b6b;"></span>
+                            <span class="user-dot" style="background: #4ecdc4;"></span>
+                            <span class="user-dot" style="background: #45b7d1;"></span>
+                        </div>
+                    </div>
+                    <div class="editor-content">
+                        <pre><code>// Совместное редактирование
+function welcome() {
+    console.log("Добро пожаловать в SyncEdit!");
+    
+    // Редактируйте код вместе
+    const collaborators = ["Вы", "Друг", "Команда"];
+    
+    return collaborators.map(user => 
+        Привет, ${user}!
+    );
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Возможности -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Возможности SyncEdit</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Совместное редактирование</h3>
+                    <p>Работайте над документами и кодом одновременно с друзьями. Видите изменения в реальном времени.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3>Чат в реальном времени</h3>
+                    <p>Обсуждайте изменения прямо в редакторе. Личные и групповые сообщения.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Подсветка синтаксиса</h3>
+                    <p>Поддержка всех популярных языков программирования. Как в профессиональных IDE.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Текстовый редактор</h3>
+                    <p>Богатое форматирование текста. Создавайте документы, заметки, документацию.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Как это работает -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2>Как начать работать</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Создайте аккаунт</h3>
+                    <p>Быстрая регистрация по email или через социальные сети</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Создайте workspace</h3>
+                    <p>Новое рабочее пространство для вашего проекта</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Пригласите друзей</h3>
+                    <p>Отправьте ссылку-приглашение вашей команде</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Начните творить</h3>
+                    <p>Создавайте документы, пишите код, общайтесь в чате</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>SyncEdit</h3>
+                    <p>Платформа для совместной работы над кодом и документами в реальном времени</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Разделы</h4>
+                    <a href="#features">Возможности</a>
+                    <a href="#about">О нас</a>
+                    <a href="#">Документация</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Поддержка</h4>
+                    <a href="#">Помощь</a>
+                    <a href="#">Контакты</a>
+                    <a href="#">Сообщить о проблеме</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 SyncEdit. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальные окна -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Вход в SyncEdit</h2>
+            <form>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Пароль" required>
+                <button type="submit" class="btn primary">Войти</button>
+            </form>
+            <div class="auth-divider">или</div>
+            <button class="btn social-btn google-btn">
+                <i class="fab fa-google"></i>
+                Войти через Google
+            </button>
+            <button class="btn social-btn github-btn">
+                <i class="fab fa-github"></i>
+                Войти через GitHub
+            </button>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Регистрация в SyncEdit</h2>
+            <form>
+                <input type="text" placeholder="Имя пользователя" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Пароль" required>
+                <button type="submit" class="btn primary">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
