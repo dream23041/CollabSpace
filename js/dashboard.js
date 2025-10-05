@@ -25,13 +25,17 @@ class Dashboard {
 
     updateNavigation() {
         const navLinks = document.getElementById('navLinks');
-        
+        const username = this.currentUser.username;
+        const firstLetter = username.charAt(0).toUpperCase();
+    
         navLinks.innerHTML = `
             <a href="#features">Возможности</a>
             <a href="#about">О проекте</a>
             <div class="user-nav">
-                <span class="user-greeting">Привет, ${this.currentUser.username}!</span>
-                <img src="https://via.placeholder.com/32" alt="Аватар" class="avatar-small" id="userAvatarNav">
+                <span class="user-greeting">Привет, ${username}!</span>
+                <div class="avatar-small" id="userAvatarNav">
+                    ${firstLetter}
+                </div>
                 <div class="dropdown">
                     <button class="user-btn" id="userMenuBtn">
                         <i class="fas fa-chevron-down"></i>
@@ -57,7 +61,7 @@ class Dashboard {
 
         // Привязываем события для нового меню
         this.bindUserMenuEvents();
-    }
+    },
 
     bindUserMenuEvents() {
         document.getElementById('userMenuBtn').addEventListener('click', (e) => {
@@ -161,14 +165,49 @@ class Dashboard {
 
     loadUserData() {
         // Загружаем данные пользователя
-        document.getElementById('sidebarUsername').textContent = this.currentUser.username;
-        document.getElementById('profileUsername').textContent = this.currentUser.username;
+        const username = this.currentUser.username;
+    
+        // Устанавливаем имя пользователя везде
+        document.getElementById('sidebarUsername').textContent = username;
+        document.getElementById('profileUsername').textContent = username;
         document.getElementById('profileEmail').textContent = this.currentUser.email;
-        
+    
+        // Создаем аватарку по умолчанию
+        this.generateDefaultAvatar(username);
+    
         // Форматируем дату регистрации
         const joinDate = new Date(this.currentUser.createdAt);
         document.getElementById('memberSince').textContent = joinDate.getFullYear();
-    }
+    },
+
+    // Новая функция для генерации аватарки по умолчанию
+    generateDefaultAvatar(username) {
+        // Берем первую букву имени для аватарки
+        const firstLetter = username.charAt(0).toUpperCase();
+    
+        // Создаем аватарку в сайдбаре
+        const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+        if (avatarPlaceholder) {
+            avatarPlaceholder.textContent = firstLetter;
+        }
+    
+        // Создаем аватарку в навигации
+        const navAvatar = document.getElementById('userAvatarNav');
+        if (navAvatar && !navAvatar.src) {
+            // Если это div для аватарки (а не img)
+            if (navAvatar.classList.contains('avatar-small')) {
+                navAvatar.textContent = firstLetter;
+            }
+        }
+    
+        // Создаем аватарку в модальном окне профиля
+        const profileAvatar = document.getElementById('profileAvatarImg');
+        const profileAvatarPlaceholder = document.querySelector('.profile-avatar .avatar-placeholder');
+    
+        if (profileAvatar && !profileAvatar.src && profileAvatarPlaceholder) {
+            profileAvatarPlaceholder.textContent = firstLetter;
+        }
+    },
 
     loadDashboardData() {
         // Загружаем статистику (в реальном приложении - с сервера)
@@ -269,6 +308,20 @@ class Dashboard {
         };
         return icons[fileType] || 'fas fa-file';
     }
+
+    showProfileModal() {
+        const modal = document.getElementById('profileModal');
+        const username = this.currentUser.username;
+        const firstLetter = username.charAt(0).toUpperCase();
+    
+        // Обновляем аватарку в модальном окне
+        const avatarPlaceholder = document.querySelector('.profile-avatar .avatar-placeholder');
+        if (avatarPlaceholder) {
+            avatarPlaceholder.textContent = firstLetter;
+        }
+    
+        modal.style.display = 'block';
+    },
 
     showCreateFileModal() {
         document.getElementById('createFileModal').style.display = 'block';
