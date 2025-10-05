@@ -239,6 +239,10 @@ function welcome() {
         </div>
     </div>
 
+    <!-- Подключаем скрипты ПРАВИЛЬНО -->
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    
     <script>
         // ПРОСТОЙ РАБОЧИЙ КОД - КНОПКИ ТОЧНО БУДУТ РАБОТАТЬ
         
@@ -275,6 +279,9 @@ function welcome() {
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Страница загружена, привязываем события...');
             
+            // Создаем тестового пользователя dream
+            createTestUser();
+            
             // Кнопки в навигации
             document.getElementById('loginBtn').addEventListener('click', showLogin);
             document.getElementById('registerBtn').addEventListener('click', showRegister);
@@ -305,58 +312,58 @@ function welcome() {
                 alert('Восстановление пароля будет доступно позже');
             });
 
-        // Обработка формы входа
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('loginUsername').value;
-            const password = document.getElementById('loginPassword').value;
+            // Обработка формы входа
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
                 
-            try {
-                if (username && password) {
-                    Auth.login(username, password);
-                    alert('Вход выполнен! Добро пожаловать, ' + username + '!');
-                    closeModal('loginModal');
-                    // Редирект на dashboard
-                    window.location.href = 'dashboard.html';
-            } else {
-                throw new Error('Заполните все поля');
-            }
-        } catch (error) {
-            alert('Ошибка входа: ' + error.message);
-        }
-        });
+                try {
+                    if (username && password) {
+                        Auth.login(username, password);
+                        alert('Вход выполнен! Добро пожаловать, ' + username + '!');
+                        closeModal('loginModal');
+                        // Редирект на dashboard
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        throw new Error('Заполните все поля');
+                    }
+                } catch (error) {
+                    alert('Ошибка входа: ' + error.message);
+                }
+            });
 
-        // Обработка формы регистрации
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const username = document.getElementById('registerUsername').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const agreeTerms = document.getElementById('agreeTerms').checked;
-    
-            try {
-                if (password !== confirmPassword) {
-                    throw new Error('Пароли не совпадают!');
+            // Обработка формы регистрации
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('registerUsername').value;
+                const email = document.getElementById('registerEmail').value;
+                const password = document.getElementById('registerPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                const agreeTerms = document.getElementById('agreeTerms').checked;
+                
+                try {
+                    if (password !== confirmPassword) {
+                        throw new Error('Пароли не совпадают!');
+                    }
+                    
+                    if (!agreeTerms) {
+                        throw new Error('Необходимо согласие с условиями использования');
+                    }
+                    
+                    if (username && email && password) {
+                        Auth.register(username, email, password);
+                        alert('Регистрация успешна! Добро пожаловать, ' + username + '!');
+                        closeModal('registerModal');
+                        // Редирект на dashboard
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        throw new Error('Заполните все поля');
+                    }
+                } catch (error) {
+                    alert('Ошибка регистрации: ' + error.message);
                 }
-        
-                if (!agreeTerms) {
-                    throw new Error('Необходимо согласие с условиями использования');
-                }
-        
-                if (username && email && password) {
-                    Auth.register(username, email, password);
-                    alert('Регистрация успешна! Добро пожаловать, ' + username + '!');
-                    closeModal('registerModal');
-                    // Редирект на dashboard
-                    window.location.href = 'dashboard.html';
-                } else {
-                    throw new Error('Заполните все поля');
-                }
-            } catch (error) {
-                alert('Ошибка регистрации: ' + error.message);
-            }
-        });
+            });
 
             // Закрытие модальных окон при клике вне
             window.addEventListener('click', function(e) {
@@ -367,6 +374,33 @@ function welcome() {
 
             console.log('Все события привязаны!');
         });
+
+        // Функция для создания тестового пользователя dream
+        function createTestUser() {
+            const users = Storage.getUsers();
+            const existingUser = users.find(u => u.username === 'dream');
+            
+            if (!existingUser) {
+                const testUser = {
+                    id: "1",
+                    username: "dream",
+                    email: "dream@admin.com",
+                    password: "Kalitina1!",
+                    createdAt: new Date().toISOString(),
+                    lastLogin: new Date().toISOString(),
+                    profile: {
+                        displayName: "Dream Admin",
+                        avatar: null,
+                        bio: "Администратор системы"
+                    },
+                    isAdmin: true // Добавляем флаг администратора
+                };
+                
+                users.push(testUser);
+                Storage.saveUsers(users);
+                console.log('Создан тестовый пользователь: dream');
+            }
+        }
 
         // Плавная прокрутка
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
