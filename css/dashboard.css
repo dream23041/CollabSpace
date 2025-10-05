@@ -556,42 +556,138 @@
     font-size: 2rem;
 }
 
-/* Админ панель */
+/* Улучшенная админ-панель */
 .admin-panel {
     position: fixed;
     top: 0;
     right: 0;
-    width: 400px;
+    width: 500px;
     height: 100vh;
     background: #1a1a1a;
     border-left: 1px solid #333;
     z-index: 10000;
     overflow-y: auto;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
 }
 
 .admin-panel-content {
     padding: 1.5rem;
 }
 
-.admin-panel h3 {
-    color: #4ecdc4;
-    margin-bottom: 1rem;
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid #333;
-    padding-bottom: 0.5rem;
 }
 
-.admin-actions {
+.admin-header h3 {
+    color: #4ecdc4;
+    margin: 0;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.close-admin {
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.close-admin:hover {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+/* Статистика */
+.admin-stats {
+    margin-bottom: 1.5rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.stat-item {
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4ecdc4;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Поиск */
+.search-section {
+    display: flex;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
 }
 
+.search-box {
+    position: relative;
+    flex: 1;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 6px;
+    color: #ffffff;
+}
+
+.search-box i {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+/* Быстрые действия */
+.quick-admin-actions {
+    margin-bottom: 1.5rem;
+}
+
+.quick-admin-actions h4 {
+    color: #cccccc;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+/* Улучшенные кнопки */
 .admin-btn {
     background: #252525;
     border: 1px solid #333;
     color: #ffffff;
-    padding: 0.75rem 1rem;
+    padding: 0.75rem;
     border-radius: 6px;
     cursor: pointer;
     text-align: left;
@@ -599,78 +695,279 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-size: 0.8rem;
 }
 
 .admin-btn:hover {
     border-color: #4ecdc4;
     background: #2a2a2a;
+    transform: translateY(-1px);
 }
 
-.admin-nav-btn {
-    background: transparent;
-    border: 1px solid #ff6b6b;
+.admin-btn.danger {
+    border-color: #ff6b6b;
     color: #ff6b6b;
-    padding: 0.5rem;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 0.5rem;
 }
 
-.admin-nav-btn:hover {
+.admin-btn.danger:hover {
     background: #ff6b6b;
     color: #0f0f0f;
 }
 
-.admin-output {
-    background: #252525;
-    border: 1px solid #333;
-    border-radius: 6px;
-    padding: 1rem;
-    max-height: 400px;
-    overflow-y: auto;
+.admin-btn.success {
+    border-color: #28ca42;
+    color: #28ca42;
 }
 
-.admin-output h4 {
-    color: #4ecdc4;
-    margin-bottom: 1rem;
+.admin-btn.warning {
+    border-color: #ffbd2e;
+    color: #ffbd2e;
 }
 
+/* Кнопки в навигации */
+.admin-nav-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    border: none;
+    color: #0f0f0f;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+}
+
+.admin-nav-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+}
+
+.return-admin-btn {
+    background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+    border: none;
+    color: #0f0f0f;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+}
+
+.return-admin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(78, 205, 196, 0.3);
+}
+
+/* Улучшенный вывод пользователей */
 .users-list {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
 }
 
 .user-item {
-    background: #1a1a1a;
+    background: #252525;
     border: 1px solid #333;
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 1rem;
-    position: relative;
+    transition: all 0.3s;
 }
 
-.user-item strong {
-    color: #4ecdc4;
+.user-item:hover {
+    border-color: #4ecdc4;
+    transform: translateY(-1px);
 }
 
-.user-item small {
+.user-item.current-user {
+    border-color: #4ecdc4;
+    background: rgba(78, 205, 196, 0.05);
+}
+
+.user-item.admin-user {
+    border-left: 4px solid #ff6b6b;
+}
+
+.user-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.user-avatar-small {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0f0f0f;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.user-info {
+    flex: 1;
+}
+
+.user-info strong {
+    color: #ffffff;
+    margin-right: 0.5rem;
+}
+
+.user-email {
     color: #666;
-    display: block;
+    font-size: 0.8rem;
     margin-top: 0.25rem;
 }
 
+.admin-badge {
+    background: #ff6b6b;
+    color: #0f0f0f;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.current-badge {
+    background: #4ecdc4;
+    color: #0f0f0f;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+}
+
+.user-details {
+    margin-bottom: 1rem;
+}
+
+.user-details small {
+    color: #666;
+    font-size: 0.75rem;
+}
+
+.user-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
 .btn-small {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.8rem;
-    margin-top: 0.5rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.3s;
+}
+
+.btn-small:hover {
+    transform: translateY(-1px);
 }
 
 .btn-small.danger {
     background: #ff6b6b;
     color: white;
-    border: none;
 }
 
-.btn-small.danger:hover {
-    background: #ff5252;
+.btn-small.warning {
+    background: #ffbd2e;
+    color: #0f0f0f;
+}
+
+.btn-small.success {
+    background: #28ca42;
+    color: #0f0f0f;
+}
+
+.btn-small.secondary {
+    background: #666;
+    color: white;
+}
+
+/* Активность */
+.activity-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.activity-item {
+    background: #252525;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.activity-count {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4ecdc4;
+    margin-bottom: 0.25rem;
+}
+
+.activity-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Уведомления */
+.admin-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #28ca42;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    z-index: 10001;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.admin-notification.error {
+    background: #ff6b6b;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.placeholder {
+    color: #666;
+    text-align: center;
+    font-style: italic;
+    padding: 2rem;
+}
+
+.no-results {
+    color: #666;
+    text-align: center;
+    padding: 2rem;
+    font-style: italic;
+}
+
+.current-user-text {
+    color: #4ecdc4;
+    font-style: italic;
 }
