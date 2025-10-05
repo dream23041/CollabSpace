@@ -15,11 +15,11 @@
                 <i class="fas fa-code"></i>
                 <span>CollabSpace</span>
             </div>
-            <div class="nav-links">
+            <div class="nav-links" id="navLinks">
                 <a href="#features">Возможности</a>
                 <a href="#about">О проекте</a>
-                <a href="#" class="login-btn" onclick="showLogin()">Войти</a>
-                <a href="#" class="register-btn" onclick="showRegister()">Регистрация</a>
+                <a href="#" class="login-btn" id="loginBtn">Войти</a>
+                <a href="#" class="register-btn" id="registerBtn">Регистрация</a>
             </div>
         </div>
     </nav>
@@ -31,8 +31,8 @@
                 <h1>Редактируйте код и документы вместе в реальном времени</h1>
                 <p>Совместная работа над проектами с друзьями и коллегами. Текстовый редактор, редактор кода и чат в одном месте.</p>
                 <div class="hero-buttons">
-                    <button class="btn primary" onclick="showRegister()">Начать бесплатно</button>
-                    <button class="btn secondary" onclick="showDemo()">Посмотреть демо</button>
+                    <button class="btn primary" id="startFreeBtn">Начать бесплатно</button>
+                    <button class="btn secondary" id="demoBtn">Посмотреть демо</button>
                 </div>
             </div>
             <div class="hero-image">
@@ -135,7 +135,7 @@ function welcome() {
     <!-- Модальные окна -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <span class="close" id="closeLogin">&times;</span>
             <h2>Вход в CollabSpace</h2>
             <form id="loginForm">
                 <div class="form-group">
@@ -149,15 +149,15 @@ function welcome() {
                 <button type="submit" class="btn primary full-width">Войти</button>
             </form>
             <div class="auth-links">
-                <a href="#" onclick="showForgotPassword()">Забыли пароль?</a>
-                <span>Нет аккаунта? <a href="#" onclick="switchToRegister()">Зарегистрироваться</a></span>
+                <a href="#" id="forgotPasswordLink">Забыли пароль?</a>
+                <span>Нет аккаунта? <a href="#" id="switchToRegister">Зарегистрироваться</a></span>
             </div>
         </div>
     </div>
 
     <div id="registerModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <span class="close" id="closeRegister">&times;</span>
             <h2>Регистрация в CollabSpace</h2>
             <form id="registerForm">
                 <div class="form-group">
@@ -184,14 +184,14 @@ function welcome() {
                 <button type="submit" class="btn primary full-width">Зарегистрироваться</button>
             </form>
             <div class="auth-links">
-                <span>Уже есть аккаунт? <a href="#" onclick="switchToLogin()">Войти</a></span>
+                <span>Уже есть аккаунт? <a href="#" id="switchToLogin">Войти</a></span>
             </div>
         </div>
     </div>
 
     <div id="forgotPasswordModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('forgotPasswordModal')">&times;</span>
+            <span class="close" id="closeForgotPassword">&times;</span>
             <h2>Восстановление пароля</h2>
             <form id="forgotPasswordForm">
                 <div class="form-group">
@@ -201,11 +201,14 @@ function welcome() {
                 <button type="submit" class="btn primary full-width">Отправить ссылку для сброса</button>
             </form>
             <div class="auth-links">
-                <a href="#" onclick="switchToLogin()">Вернуться ко входу</a>
+                <a href="#" id="backToLogin">Вернуться ко входу</a>
             </div>
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <!-- Подключаем JS файлы -->
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
 </body>
 </html>
