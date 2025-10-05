@@ -5,18 +5,27 @@ const Auth = {
     // Валидация имени пользователя
     validateUsername(username) {
         const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
-        return usernameRegex.test(username);
+        if (!usernameRegex.test(username)) {
+            throw new Error('Имя пользователя должно содержать от 3 до 20 символов (только буквы, цифры и подчеркивания)');
+        }
+        return true;
     },
 
     // Валидация email
     validateEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+        if (!emailRegex.test(email)) {
+            throw new Error('Введите корректный email адрес');
+        }
+        return true;
     },
 
     // Валидация пароля
     validatePassword(password) {
-        return password.length >= 6;
+        if (password.length < 6) {
+            throw new Error('Пароль должен содержать минимум 6 символов');
+        }
+        return true;
     },
 
     // Проверка уникальности имени пользователя
@@ -33,30 +42,20 @@ const Auth = {
 
     // Регистрация
     register(username, email, password) {
+        // Валидация
+        this.validateUsername(username);
+        this.validateEmail(email);
+        this.validatePassword(password);
+
         const users = Storage.getUsers();
         
-        // Валидация имени пользователя
-        if (!this.validateUsername(username)) {
-            throw new Error('Имя пользователя должно содержать от 3 до 20 символов (только буквы, цифры и подчеркивания)');
-        }
-
         // Проверка на существующего пользователя
         if (!this.isUsernameUnique(username)) {
-            throw new Error('Пользователь с таким именем уже существует');
+            throw new Error('Пользователь с таким именем уже существует. Выберите другое имя.');
         }
 
         if (!this.isEmailUnique(email)) {
-            throw new Error('Пользователь с таким email уже существует');
-        }
-
-        // Валидация email
-        if (!this.validateEmail(email)) {
-            throw new Error('Введите корректный email адрес');
-        }
-
-        // Валидация пароля
-        if (!this.validatePassword(password)) {
-            throw new Error('Пароль должен содержать минимум 6 символов');
+            throw new Error('Пользователь с таким email уже существует. Используйте другой email.');
         }
 
         // Создание нового пользователя
@@ -64,7 +63,7 @@ const Auth = {
             id: Date.now().toString(),
             username: username,
             email: email,
-            password: password, // В реальном проекте нужно хэшировать!
+            password: password,
             createdAt: new Date().toISOString(),
             lastLogin: new Date().toISOString(),
             profile: {
@@ -92,7 +91,7 @@ const Auth = {
         );
         
         if (!user) {
-            throw new Error('Неверное имя пользователя или пароль');
+            throw new Error('Неверное имя пользователя или пароль. Проверьте данные или зарегистрируйтесь.');
         }
 
         // Обновляем время последнего входа
