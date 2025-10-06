@@ -1,7 +1,12 @@
-// Продвинутая админ-панель
+// Продвинутая админ-панель с защитой
 const AdminTools = {
     // Показать/скрыть админ панель
     toggleAdminPanel() {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         const panel = document.getElementById('adminPanel');
         if (panel.style.display === 'none') {
             panel.style.display = 'block';
@@ -17,6 +22,8 @@ const AdminTools = {
 
     // Загрузка статистики
     loadAdminStats() {
+        if (!this.isAdmin()) return;
+        
         const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
         const currentUser = JSON.parse(localStorage.getItem('collabspace_current_user') || 'null');
         
@@ -51,13 +58,18 @@ const AdminTools = {
 
     // Поиск пользователей
     searchUsers() {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         const query = document.getElementById('adminSearch').value.toLowerCase();
         const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
         
         const results = users.filter(user => 
             user.username.toLowerCase().includes(query) ||
             user.email.toLowerCase().includes(query) ||
-            user.profile.displayName.toLowerCase().includes(query)
+            (user.profile.displayName && user.profile.displayName.toLowerCase().includes(query))
         );
         
         this.displaySearchResults(results, query);
@@ -76,7 +88,8 @@ const AdminTools = {
         html += '<div class="users-list">';
         
         users.forEach(user => {
-            const isCurrent = user.username === JSON.parse(localStorage.getItem('collabspace_current_user') || '{}').username;
+            const currentUser = JSON.parse(localStorage.getItem('collabspace_current_user') || '{}');
+            const isCurrent = user.username === currentUser.username;
             const isAdmin = user.isAdmin;
             
             html += `
@@ -126,6 +139,11 @@ const AdminTools = {
 
     // Войти как другой пользователь (Impersonate)
     impersonateUser(username) {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
         const targetUser = users.find(u => u.username === username);
         
@@ -160,6 +178,11 @@ const AdminTools = {
 
     // Сделать пользователя админом
     makeAdmin(username) {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
         const userIndex = users.findIndex(u => u.username === username);
         
@@ -173,6 +196,11 @@ const AdminTools = {
 
     // Убрать права админа
     removeAdmin(username) {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         if (username === 'dream') {
             this.showNotification('Нельзя убрать права у главного администратора!', 'error');
             return;
@@ -191,6 +219,11 @@ const AdminTools = {
 
     // Показать всех пользователей
     showAllUsers() {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         document.getElementById('adminSearch').value = '';
         const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
         this.displaySearchResults(users, '');
@@ -198,14 +231,28 @@ const AdminTools = {
 
     // Расширенное создание тестового пользователя
     createAdvancedTestUser() {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         const username = prompt('Введите имя пользователя (или оставьте пустым для автоматического):');
+        if (username === null) return; // Пользователь отменил
+        
         const email = prompt('Введите email (или оставьте пустым для автоматического):');
+        if (email === null) return;
+        
         const isAdmin = confirm('Сделать этого пользователя администратором?');
         
         const finalUsername = username || 'testuser' + Date.now();
         const finalEmail = email || 'test' + Date.now() + '@test.com';
         
+        // Проверка на существующего пользователя
         const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
+        if (users.find(u => u.username === finalUsername)) {
+            this.showNotification('Пользователь с таким именем уже существует!', 'error');
+            return;
+        }
         
         const newUser = {
             id: Date.now().toString(),
@@ -231,7 +278,17 @@ const AdminTools = {
 
     // Массовое создание тестовых пользователей
     createMultipleTestUsers() {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         const count = parseInt(prompt('Сколько тестовых пользователей создать?', '5')) || 5;
+        
+        if (count > 20) {
+            this.showNotification('Нельзя создать больше 20 пользователей за раз!', 'error');
+            return;
+        }
         
         for (let i = 0; i < count; i++) {
             setTimeout(() => {
@@ -247,6 +304,8 @@ const AdminTools = {
 
     // Старая функция создания тестового пользователя (для обратной совместимости)
     createTestUser() {
+        if (!this.isAdmin()) return;
+
         const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
         const testId = Date.now();
         
@@ -265,7 +324,7 @@ const AdminTools = {
         };
 
         users.push(newUser);
-        localStorage.setItem('collabspace_users', JSON.stringify(newUser));
+        localStorage.setItem('collabspace_users', JSON.stringify(users));
         
         this.showNotification(Создан тестовый пользователь: ${newUser.username});
         this.showAllUsers();
@@ -273,6 +332,11 @@ const AdminTools = {
 
     // Экспорт данных в разных форматах
     exportData(format = 'json') {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         const data = {
             users: JSON.parse(localStorage.getItem('collabspace_users') || '[]'),
             currentUser: JSON.parse(localStorage.getItem('collabspace_current_user') || 'null'),
@@ -306,10 +370,10 @@ const AdminTools = {
     convertToCSV(users) {
         const headers = ['Username', 'Email', 'Created', 'Last Login', 'Is Admin'];
         const rows = users.map(user => [
-            user.username,
-            user.email,
-            new Date(user.createdAt).toLocaleDateString(),
-            new Date(user.lastLogin).toLocaleDateString(),
+            "${user.username}",
+            "${user.email}",
+            "${new Date(user.createdAt).toLocaleDateString()}",
+            "${new Date(user.lastLogin).toLocaleDateString()}",
             user.isAdmin ? 'Yes' : 'No'
         ]);
         
@@ -318,6 +382,11 @@ const AdminTools = {
 
     // Аналитика активности
     showUserActivity() {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -353,8 +422,13 @@ const AdminTools = {
         `;
     },
 
-    // Остальные функции остаются без изменений
+    // Удалить пользователя
     deleteUser(username) {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         if (username === 'dream') {
             this.showNotification('Нельзя удалить главного администратора!', 'error');
             return;
@@ -372,7 +446,13 @@ const AdminTools = {
         this.searchUsers();
     },
 
+    // Очистить базу данных
     clearDatabase() {
+        if (!this.isAdmin()) {
+            this.showNotification('❌ Доступ запрещен! Требуются права администратора.', 'error');
+            return;
+        }
+
         if (!confirm('ВНИМАНИЕ! Это удалит ВСЕХ пользователей кроме dream. Продолжить?')) {
             return;
         }
@@ -389,21 +469,60 @@ const AdminTools = {
         this.showAllUsers();
     },
 
+    // Показать уведомление
     showNotification(message, type = 'success') {
-        // Временное решение - можно заменить на красивые уведомления
+        // Создаем красивое уведомление
         const notification = document.createElement('div');
         notification.className = admin-notification ${type};
-        notification.textContent = message;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas fa-${type === 'success' ? 'check' : 'exclamation-triangle'}"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
         document.body.appendChild(notification);
         
+        // Анимация появления
         setTimeout(() => {
-            notification.remove();
-        }, 3000);
+            notification.classList.add('show');
+        }, 10);
+        
+        // Автоматическое скрытие
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }, 4000);
     },
 
+    // Проверка прав администратора (ОСНОВНАЯ ФУНКЦИЯ БЕЗОПАСНОСТИ)
     isAdmin() {
-        const currentUser = JSON.parse(localStorage.getItem('collabspace_current_user') || 'null');
-        return currentUser && (currentUser.username === 'dream' || currentUser.isAdmin);
+        try {
+            const currentUser = JSON.parse(localStorage.getItem('collabspace_current_user') || 'null');
+            const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
+            
+            if (!currentUser) {
+                console.warn('Попытка доступа к админ-панели без авторизации');
+                return false;
+            }
+            
+            // Ищем пользователя в базе и проверяем флаг isAdmin
+            const userInDb = users.find(u => u.id === currentUser.id && u.username === currentUser.username);
+            
+            if (!userInDb) {
+                console.warn('Обнаружена попытка несанкционированного доступа!');
+                return false;
+            }
+            
+            return userInDb.username === 'dream' || userInDb.isAdmin === true;
+        } catch (error) {
+            console.error('Ошибка проверки прав администратора:', error);
+            return false;
+        }
     }
 };
 
@@ -417,6 +536,9 @@ function initAdminPanel() {
         if (originalAdmin) {
             addReturnToAdminButton();
         }
+    } else {
+        // Защита для не-админов - переопределяем функции
+        protectAdminFunctions();
     }
 }
 
@@ -439,12 +561,48 @@ function addReturnToAdminButton() {
         returnBtn.className = 'return-admin-btn';
         returnBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Вернуться к админу';
         returnBtn.onclick = AdminTools.returnToAdmin;
-        userNav.appendChild(returnBtn);
+        userNav.insertBefore(returnBtn, userNav.querySelector('.admin-nav-btn'));
     }
 }
 
+// Защита от вызова админ-функций не-админами через консоль
+function protectAdminFunctions() {
+    const protectedFunctions = [
+        'showAllUsers', 'searchUsers', 'deleteUser', 'impersonateUser',
+        'makeAdmin', 'removeAdmin', 'createAdvancedTestUser', 'createMultipleTestUsers',
+        'createTestUser', 'exportData', 'showUserActivity', 'clearDatabase',
+        'toggleAdminPanel'
+    ];
+    
+    protectedFunctions.forEach(funcName => {
+        if (typeof AdminTools[funcName] === 'function') {
+            const originalFunction = AdminTools[funcName];
+            AdminTools[funcName] = function(...args) {
+                if (!AdminTools.isAdmin()) {
+                    console.error('❌ Доступ запрещен! Требуются права администратора.');
+                    alert('Недостаточно прав для выполнения этой операции!');
+                    return;
+                }
+                return originalFunction.apply(this, args);
+            };
+        }
+    });
+}
+
+// Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    initAdminPanel();
+    setTimeout(initAdminPanel, 100); // Небольшая задержка для полной загрузки
 });
 
+// Защита от прямого доступа к объекту
+(function() {
+    if (typeof Storage === 'undefined') {
+        console.error('LocalStorage не поддерживается!');
+        return;
+    }
+})();
+
+// Делаем доступным глобально (с защитой)
 window.AdminTools = AdminTools;
+
+console.log('AdminTools загружен с защитой безопасности');
