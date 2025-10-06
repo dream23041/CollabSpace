@@ -43,11 +43,8 @@
                 <i class="fas fa-code"></i>
                 <span>CollabSpace</span>
             </div>
-            <div class="nav-links">
-                <a href="#features">Возможности</a>
-                <a href="about.html">О проекте</a>
-                <button class="login-btn" id="loginBtn">Войти</button>
-                <button class="register-btn" id="registerBtn">Регистрация</button>
+            <div class="nav-links" id="navLinks">
+                <!-- Заполняется автоматически через navigation.js -->
             </div>
         </div>
     </nav>
@@ -431,5 +428,15 @@ function welcome() {
             });
         });
     </script>
+
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Navigation.initPublicPage();
+        });
+    </script>
+    
 </body>
 </html>
