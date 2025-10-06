@@ -94,6 +94,11 @@ class Dashboard {
             this.showCreateFileModal();
         });
 
+        // Приглашение
+        document.getElementById('inviteBtn').addEventListener('click', () => {
+            this.handleInvite();
+        });
+
         // Создание проекта
         document.getElementById('createProjectBtn').addEventListener('click', () => {
             this.showCreateProjectModal();
@@ -101,10 +106,19 @@ class Dashboard {
 
         // Быстрые действия
         document.querySelectorAll('.action-card').forEach(card => {
-            card.addEventListener('click', () => {
+            card.addEventListener('click', (e) => {
                 const action = card.dataset.action;
                 this.handleQuickAction(action);
             });
+        });
+
+        // Обработка форм
+        document.getElementById('createFileForm').addEventListener('submit', (e) => {
+            this.handleCreateFile(e);
+        });
+
+        document.getElementById('createProjectForm').addEventListener('submit', (e) => {
+            this.handleCreateProject(e);
         });
 
         // Закрытие модальных окон
@@ -129,15 +143,6 @@ class Dashboard {
             this.closeModal('createProjectModal');
         });
 
-        // Формы
-        document.getElementById('createFileForm').addEventListener('submit', (e) => {
-            this.handleCreateFile(e);
-        });
-
-        document.getElementById('createProjectForm').addEventListener('submit', (e) => {
-            this.handleCreateProject(e);
-        });
-
         // Выбор типа файла
         this.bindFileTypeSelection();
 
@@ -147,8 +152,34 @@ class Dashboard {
                 e.target.style.display = 'none';
             }
         });
-    }
 
+        // Двойной клик по файлам для открытия
+        this.bindFileClickEvents();
+    },
+
+    // Привязка событий клика по файлам
+    bindFileClickEvents() {
+        document.addEventListener('click', (e) => {
+            const fileRow = e.target.closest('.file-row');
+            if (fileRow) {
+                const fileName = fileRow.querySelector('.file-name').textContent;
+                this.openFile(fileName);
+            }
+        
+            const recentFileItem = e.target.closest('.recent-file-item');
+            if (recentFileItem) {
+                const fileName = recentFileItem.querySelector('span').textContent;
+                this.openFile(fileName);
+            }
+        });
+    },
+
+    // Открытие файла (заглушка - можно подключить к editor.html)
+    openFile(filename) {
+        this.showNotification(Открытие файла: ${filename});
+        // В будущем: window.location.href = editor.html?file=${filename};
+    },
+    
     bindFileTypeSelection() {
         const fileTypeOptions = document.querySelectorAll('.file-type-option');
         
@@ -279,17 +310,37 @@ class Dashboard {
     },
 
     updateStats() {
-        // Временные данные для демонстрации
-        document.getElementById('filesCount').textContent = '5';
-        document.getElementById('projectsCount').textContent = '2';
-        document.getElementById('collaboratorsCount').textContent = '1';
-        document.getElementById('lastActive').textContent = 'Сегодня';
+        // Получаем реальные данные из localStorage
+        const files = JSON.parse(localStorage.getItem('collabspace_files') || '[]');
+        const projects = JSON.parse(localStorage.getItem('collabspace_projects') || '[]');
+        const folders = JSON.parse(localStorage.getItem('collabspace_folders') || '[]');
+    
+        // Фильтруем файлы текущего пользователя
+        const userFiles = files.filter(file => file.owner === this.currentUser.id);
+        const userProjects = projects.filter(project => project.owner === this.currentUser.id);
+    
+        // Обновляем статистику на dashboard
+        document.getElementById('filesCount').textContent = userFiles.length;
+        document.getElementById('projectsCount').textContent = userProjects.length + folders.length;
+        document.getElementById('collaboratorsCount').textContent = '1'; // Пока только владелец
+        document.getElementById('lastActive').textContent = this.formatLastActive();
 
-        // Для профиля
-        document.getElementById('profileFilesCount').textContent = '5';
-        document.getElementById('profileProjectsCount').textContent = '2';
+        // Обновляем статистику в профиле
+        document.getElementById('profileFilesCount').textContent = userFiles.length;
+        document.getElementById('profileProjectsCount').textContent = userProjects.length + folders.length;
         document.getElementById('profileCollaborationsCount').textContent = '0';
-    }
+    },
+
+    // Добавьте эту вспомогательную функцию тоже:
+    formatLastActive() {
+        const now = new Date();
+        const hours = now.getHours();
+    
+        if (hours < 6) return 'Ночью';
+        if (hours < 12) return 'Утром';
+        if (hours < 18) return 'Днём';
+        return 'Вечером';
+    },
 
     loadRecentFiles() {
         const recentFiles = [
@@ -519,14 +570,36 @@ class Dashboard {
     }
 
     saveFile(file) {
-        // В реальном проекте здесь будет API запрос
-        console.log('Создан файл:', file);
-    }
+        // Получаем существующие файлы
+        const files = JSON.parse(localStorage.getItem('collabspace_files') || '[]');
+    
+        // Добавляем новый файл
+        files.push(file);
+    
+        // Сохраняем обратно в localStorage
+        localStorage.setItem('collabspace_files', JSON.stringify(files));
+    
+        console.log('Файл сохранен:', file);
+    
+        // Обновляем статистику
+        this.updateStats();
+    },
 
     saveProject(project) {
-        // В реальном проекте здесь будет API запрос
-        console.log('Создан проект:', project);
-    }
+        // Получаем существующие проекты
+        const projects = JSON.parse(localStorage.getItem('collabspace_projects') || '[]');
+    
+        // Добавляем новый проект
+        projects.push(project);
+    
+        // Сохраняем обратно в localStorage
+        localStorage.setItem('collabspace_projects', JSON.stringify(projects));
+    
+        console.log('Проект сохранен:', project);
+    
+        // Обновляем статистику
+        this.updateStats();
+    },
 
     showNotification(message, type = 'success') {
         if (typeof UI !== 'undefined') {
