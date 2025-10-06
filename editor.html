@@ -1,1 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактор - CollabSpace</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/ui.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .editor-container {
+            display: flex;
+            height: calc(100vh - 60px);
+            margin-top: 60px;
+        }
+        
+        .editor-sidebar {
+            width: 250px;
+            background: #1a1a1a;
+            border-right: 1px solid #333;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        
+        .editor-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0f0f0f;
+        }
+        
+        .editor-header {
+            background: #1a1a1a;
+            border-bottom: 1px solid #333;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .editor-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .editor-title input {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.5rem;
+            border-radius: 4px;
+            min-width: 300px;
+        }
+        
+        .editor-title input:focus {
+            outline: none;
+            background: #252525;
+        }
+        
+        .editor-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .editor-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .toolbar {
+            background: #252525;
+            border-bottom: 1px solid #333;
+            padding: 0.75rem 1rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .toolbar-btn {
+            background: #333;
+            border: none;
+            color: #ffffff;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .toolbar-btn:hover {
+            background: #4ecdc4;
+            color: #0f0f0f;
+        }
+        
+        .text-editor {
+            flex: 1;
+            padding: 1rem;
+            background: #1e1e1e;
+            border: none;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+        }
+        
+        .text-editor:focus {
+            background: #252525;
+        }
+        
+        .file-tree {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .file-tree-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .file-tree-item:hover {
+            background: #252525;
+        }
+        
+        .file-tree-item.active {
+            background: #4ecdc4;
+            color: #0f0f0f;
+        }
+        
+        .file-info {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .file-info h4 {
+            margin-bottom: 0.5rem;
+            color: #4ecdc4;
+        }
+        
+        .file-meta {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-code"></i>
+                <span>CollabSpace</span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <!-- Заполняется JavaScript -->
+            </div>
+        </div>
+    </nav>
 
+    <!-- Основной редактор -->
+    <div class="editor-container">
+        <!-- Боковая панель -->
+        <aside class="editor-sidebar">
+            <div class="sidebar-section">
+                <h3>Файлы</h3>
+                <div class="file-tree" id="fileTree">
+                    <!-- Файлы будут добавляться через JS -->
+                </div>
+                <button class="sidebar-btn" onclick="createNewFile()">
+                    <i class="fas fa-plus"></i>
+                    Новый файл
+                </button>
+            </div>
+            
+            <div class="file-info">
+                <h4>Информация о файле</h4>
+                <div class="file-meta" id="fileInfo">
+                    Выберите файл для просмотра информации
+                </div>
+            </div>
+        </aside>
+
+        <!-- Основная область -->
+        <main class="editor-main">
+            <div class="editor-header">
+                <div class="editor-title">
+                    <i class="fas fa-file-alt" id="fileIcon"></i>
+                    <input type="text" id="fileNameInput" placeholder="Название файла" value="Новый документ.txt">
+                </div>
+                <div class="editor-actions">
+                    <button class="btn primary" onclick="saveFile()">
+                        <i class="fas fa-save"></i>
+                        Сохранить
+                    </button>
+                    <button class="btn secondary" onclick="downloadFile()">
+                        <i class="fas fa-download"></i>
+                        Скачать
+                    </button>
+                    <button class="btn secondary" onclick="goToDashboard()">
+                        <i class="fas fa-arrow-left"></i>
+                        Назад
+                    </button>
+                </div>
+            </div>
+
+            <div class="editor-content">
+                <div class="toolbar">
+                    <button class="toolbar-btn" onclick="formatText('bold')">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="formatText('italic')">
+                        <i class="fas fa-italic"></i>
+                    </button>
+                    <button class="toolbar-btn" onclick="formatText('underline')">
+                        <i class="fas fa-underline"></i>
+                    </button>
+                    <div style="width: 1px; background: #333; margin: 0 0.5rem;"></div>
+                    <button class="toolbar-btn" onclick="insertText('# Заголовок\n')">
+                        <i class="fas fa-heading"></i>
+                        Заголовок
+                    </button>
+                    <button class="toolbar-btn" onclick="insertText('- Элемент списка\n')">
+                        <i class="fas fa-list"></i>
+                        Список
+                    </button>
+                    <button class="toolbar-btn" onclick="insertText('\nкод\n\n')">
+                        <i class="fas fa-code"></i>
+                        Код
+                    </button>
+                </div>
+                
+                <textarea 
+                    class="text-editor" 
+                    id="textEditor"
+                    placeholder="Начните писать здесь...&#10;&#10;Используйте панель инструментов для форматирования текста."
+                ></textarea>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/editor.js"></script>
+</body>
+</html>
