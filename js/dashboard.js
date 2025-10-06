@@ -174,10 +174,19 @@ class Dashboard {
         });
     },
 
-    // Открытие файла (заглушка - можно подключить к editor.html)
     openFile(filename) {
-        this.showNotification(Открытие файла: ${filename});
-        // В будущем: window.location.href = editor.html?file=${filename};
+        // Находим файл в localStorage
+        const files = JSON.parse(localStorage.getItem('collabspace_files') || '[]');
+        const file = files.find(f => f.name === filename && f.owner === this.currentUser.id);
+    
+        if (file) {
+            // Сохраняем ID файла для открытия в редакторе
+            localStorage.setItem('collabspace_current_file', JSON.stringify(file));
+            // Переходим в редактор
+            window.location.href = 'editor.html';
+        } else {
+            this.showNotification('Файл не найден', 'error');
+        }
     },
     
     bindFileTypeSelection() {
