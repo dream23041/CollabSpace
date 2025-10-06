@@ -82,16 +82,21 @@ const Auth = {
         return newUser;
     },
 
-    // Вход
+    // В функции login добавить валидацию
     login(username, password) {
         const users = Storage.getUsers();
         const user = users.find(u => 
             u.username.toLowerCase() === username.toLowerCase() && 
             u.password === password
         );
-        
+    
         if (!user) {
-            throw new Error('Неверное имя пользователя или пароль. Проверьте данные или зарегистрируйтесь.');
+            throw new Error('Неверное имя пользователя или пароль');
+        }
+
+        // Валидация пользователя
+        if (!user.id || !user.username) {
+            throw new Error('Некорректные данные пользователя');
         }
 
         // Обновляем время последнего входа
