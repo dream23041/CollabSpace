@@ -542,6 +542,272 @@ class Dashboard {
             window.location.href = 'index.html';
         }
     }
+
+    // В класс Dashboard добавим новые методы
+
+    // Обработка создания файла
+    handleCreateFile(e) {
+        e.preventDefault();
+    
+        const fileName = document.getElementById('fileName').value;
+        const fileType = document.getElementById('fileType').value;
+
+        if (!fileName) {
+            this.showNotification('Введите название файла', 'error');
+            return;
+        }
+
+        if (!fileType) {
+            this.showNotification('Выберите тип файла', 'error');
+            return;
+        }
+
+        // Создание файла
+        const file = {
+            id: Date.now().toString(),
+            name: fileName,
+            type: fileType,
+            extension: this.getExtension(fileType),
+            content: this.getDefaultContent(fileType),
+            created: new Date().toISOString(),
+            modified: new Date().toISOString(),
+            owner: this.currentUser.id,
+            size: '0 KB'
+        };
+
+        // Сохранение файла
+        this.saveFile(file);
+    
+        // Показать уведомление
+        this.showNotification(Файл "${fileName}" создан успешно!);
+    
+        // Закрыть модальное окно
+        this.closeModal('createFileModal');
+    
+        // Очистить форму
+        document.getElementById('createFileForm').reset();
+        document.querySelectorAll('.file-type-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+
+        // Обновить список файлов
+        this.loadRecentFiles();
+        this.updateStats();
+    },
+
+    // Обработка приглашения
+    handleInvite() {
+        const workspaceName = document.getElementById('workspaceTitle').textContent;
+        const inviteMessage = Присоединяйтесь к моему рабочему пространству "${workspaceName}" в CollabSpace!;
+    
+        // Создаем временную ссылку для демонстрации
+        const inviteLink = ${window.location.origin}${window.location.pathname}?invite=${this.currentUser.id};
+    
+        // Показываем модальное окно с приглашением
+        this.showInviteModal(inviteMessage, inviteLink);
+    },
+
+    // Показ модального окна приглашения
+    showInviteModal(message, link) {
+        // Создаем модальное окно на лету
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.id = 'inviteModal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <span class="close" onclick="this.parentElement.parentElement.remove()">&times;</span>
+                <h2>Пригласить в рабочее пространство</h2>
+                <div class="invite-content">
+                    <p>Отправьте эту ссылку друзьям:</p>
+                    <div class="invite-link">
+                        <input type="text" value="${link}" readonly id="inviteLinkInput">
+                        <button onclick="copyInviteLink()" class="btn primary">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <div class="share-options">
+                        <p>Или поделитесь через:</p>
+                        <div class="share-buttons">
+                            <button class="share-btn email" onclick="shareViaEmail('${message}', '${link}')">
+                                <i class="fas fa-envelope"></i> Email
+                            </button>
+                            <button class="share-btn telegram" onclick="shareViaTelegram('${message}', '${link}')">
+                                <i class="fab fa-telegram"></i> Telegram
+                            </button>
+                            <button class="share-btn whatsapp" onclick="shareViaWhatsApp('${message}', '${link}')">
+                                <i class="fab fa-whatsapp"></i> WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    
+        document.body.appendChild(modal);
+        modal.style.display = 'block';
+    
+        // Добавляем глобальные функции для копирования и шаринга
+        window.copyInviteLink = function() {
+            const input = document.getElementById('inviteLinkInput');
+            input.select();
+            document.execCommand('copy');
+        
+            // Показываем уведомление о копировании
+            const notification = document.createElement('div');
+            notification.className = 'copy-notification';
+            notification.textContent = 'Ссылка скопирована в буфер обмена!';
+            document.body.appendChild(notification);
+        
+            setTimeout(() => notification.remove(), 2000);
+        };
+    
+        window.shareViaEmail = function(message, link) {
+            const subject = 'Приглашение в CollabSpace';
+            const body = ${message}\n\n${link};
+            window.open(mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)});
+        };
+    
+        window.shareViaTelegram = function(message, link) {
+            const text = ${message} ${link};
+            window.open(https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(message)});
+        };
+    
+        window.shareViaWhatsApp = function(message, link) {
+            const text = ${message} ${link};
+            window.open(https://wa.me/?text=${encodeURIComponent(text)});
+        };
+    },
+
+    // Обработка быстрых действий
+    handleQuickAction(action) {
+        switch (action) {
+            case 'create-file':
+                this.showCreateFileModal();
+                break;
+            case 'create-code':
+                this.showCreateFileModal();
+                // Автоматически выбираем тип "text" для текстового документа
+                setTimeout(() => {
+                    const textOption = document.querySelector('[data-type="text"]');
+                    if (textOption) textOption.click();
+                }, 100);
+                break;
+            case 'create-folder':
+                this.showCreateFolderModal();
+                break;
+            case 'import-files':
+                this.showImportModal();
+                break;
+        }
+    },
+
+    // Создание папки
+    showCreateFolderModal() {
+        const folderName = prompt('Введите название папки:');
+        if (folderName) {
+            const folder = {
+                id: Date.now().toString(),
+                name: folderName,
+                type: 'folder',
+                created: new Date().toISOString(),
+                owner: this.currentUser.id,
+                files: []
+            };
+        
+            this.saveFolder(folder);
+            this.showNotification(Папка "${folderName}" создана);
+            this.loadProjects();
+        }
+    },
+
+    // Импорт файлов
+    showImportModal() {
+        // Создаем input для выбора файлов
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.multiple = true;
+        input.accept = '.txt,.js,.html,.css,.md,.json';
+    
+        input.onchange = (e) => {
+            const files = e.target.files;
+            if (files.length > 0) {
+                this.handleFileImport(files);
+            }
+        };
+    
+        input.click();
+    },
+
+    // Обработка импорта файлов
+    handleFileImport(files) {
+        let importedCount = 0;
+    
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+        
+            reader.onload = (e) => {
+                const content = e.target.result;
+                const fileType = this.getFileTypeFromExtension(file.name);
+            
+                const importedFile = {
+                    id: Date.now().toString() + importedCount,
+                    name: file.name,
+                    type: fileType,
+                    extension: this.getExtension(fileType),
+                    content: content,
+                    created: new Date().toISOString(),
+                    modified: new Date().toISOString(),
+                    owner: this.currentUser.id,
+                    size: this.formatFileSize(file.size),
+                    imported: true
+                };
+            
+                this.saveFile(importedFile);
+                importedCount++;
+            
+                if (importedCount === files.length) {
+                    this.showNotification(Импортировано файлов: ${importedCount});
+                    this.loadRecentFiles();
+                    this.updateStats();
+                }
+            };
+        
+            reader.readAsText(file);
+        });
+    },
+
+    // Определение типа файла по расширению
+    getFileTypeFromExtension(filename) {
+        const extension = filename.split('.').pop().toLowerCase();
+        const typeMap = {
+            'js': 'javascript',
+            'html': 'html',
+            'css': 'css',
+            'txt': 'text',
+            'md': 'markdown',
+            'json': 'json'
+        };
+    
+        return typeMap[extension] || 'text';
+    },
+
+    // Форматирование размера файла
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    },
+
+    // Сохранение папки
+    saveFolder(folder) {
+        const folders = JSON.parse(localStorage.getItem('collabspace_folders') || '[]');
+        folders.push(folder);
+        localStorage.setItem('collabspace_folders', JSON.stringify(folders));
+        console.log('Создана папка:', folder);
+    },
+    
 }
 
 // Инициализация dashboard
