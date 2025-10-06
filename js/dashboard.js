@@ -6,10 +6,13 @@ class Dashboard {
     }
 
     init() {
+        console.log('=== DASHBOARD INIT ===');
         this.checkAuth();
+        console.log('Текущий пользователь после checkAuth:', this.currentUser);
         this.bindEvents();
         this.loadUserData();
         this.loadDashboardData();
+        console.log('=== DASHBOARD INIT COMPLETE ===');
     }
 
     checkAuth() {
