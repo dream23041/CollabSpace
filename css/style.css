@@ -754,3 +754,28 @@ section {
     color: #45b7d1;
     text-decoration: underline;
 }
+
+.agreements-section {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid #333;
+}
+
+.agreements-section .checkbox-group {
+    margin-bottom: 0.75rem;
+}
+
+.agreements-section .checkbox-group:last-child {
+    margin-bottom: 0;
+}
+
+.agreements-section a {
+    color: #4ecdc4;
+    text-decoration: none;
+}
+
+.agreements-section a:hover {
+    text-decoration: underline;
+}
