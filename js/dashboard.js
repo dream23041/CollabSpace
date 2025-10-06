@@ -244,12 +244,39 @@ class Dashboard {
         }
     },
 
+    // В функции loadDashboardData() добавьте проверку
     loadDashboardData() {
-        // Загружаем статистику (в реальном приложении - с сервера)
+        // Обычные пользователи видят только свою статистику
         this.updateStats();
         this.loadRecentFiles();
         this.loadProjects();
-    }
+    
+        // Только админы видят админ-функции
+        if (this.isUserAdmin()) {
+            this.initAdminFeatures();
+        }
+    },
+
+    // Новая функция проверки админа
+    isUserAdmin() {
+        try {
+            const currentUser = this.currentUser;
+            const users = JSON.parse(localStorage.getItem('collabspace_users') || '[]');
+        
+            if (!currentUser) return false;
+        
+            const userInDb = users.find(u => u.id === currentUser.id);
+            return userInDb && (userInDb.username === 'dream' || userInDb.isAdmin === true);
+        } catch (error) {
+            return false;
+        }
+    },
+
+    // Инициализация админ-функций только для админов
+    initAdminFeatures() {
+        console.log('Инициализация админ-функций для пользователя:', this.currentUser.username);
+        // Здесь можно добавить дополнительные админ-функции
+    },
 
     updateStats() {
         // Временные данные для демонстрации
