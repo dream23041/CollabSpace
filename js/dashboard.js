@@ -164,48 +164,80 @@ class Dashboard {
     }
 
     loadUserData() {
+        if (!this.currentUser) {
+            console.error('Нет текущего пользователя!');
+            return;
+        }
+
         // Загружаем данные пользователя
         const username = this.currentUser.username;
+        console.log('Загружаем пользователя:', username);
     
         // Устанавливаем имя пользователя везде
-        document.getElementById('sidebarUsername').textContent = username;
-        document.getElementById('profileUsername').textContent = username;
-        document.getElementById('profileEmail').textContent = this.currentUser.email;
+        const sidebarUsername = document.getElementById('sidebarUsername');
+        const profileUsername = document.getElementById('profileUsername');
+    
+        if (sidebarUsername) sidebarUsername.textContent = username;
+        if (profileUsername) profileUsername.textContent = username;
+    
+        // Устанавливаем email
+        const profileEmail = document.getElementById('profileEmail');
+        if (profileEmail) profileEmail.textContent = this.currentUser.email || 'Не указан';
     
         // Создаем аватарку по умолчанию
         this.generateDefaultAvatar(username);
     
         // Форматируем дату регистрации
-        const joinDate = new Date(this.currentUser.createdAt);
-        document.getElementById('memberSince').textContent = joinDate.getFullYear();
+        if (this.currentUser.createdAt) {
+            const joinDate = new Date(this.currentUser.createdAt);
+            const memberSince = document.getElementById('memberSince');
+            if (memberSince) memberSince.textContent = joinDate.getFullYear();
+        }
     },
 
-    // Новая функция для генерации аватарки по умолчанию
+    // Улучшенная функция для генерации аватарки
     generateDefaultAvatar(username) {
+        if (!username) {
+            console.error('Нет имени пользователя для аватарки!');
+            return;
+        }
+
         // Берем первую букву имени для аватарки
         const firstLetter = username.charAt(0).toUpperCase();
+        console.log('Генерируем аватарку для:', username, 'буква:', firstLetter);
     
         // Создаем аватарку в сайдбаре
         const avatarPlaceholder = document.getElementById('avatarPlaceholder');
         if (avatarPlaceholder) {
-            avatarPlaceholder.textContent = firstLetter;
+            avatarPlaceholder.innerHTML = firstLetter;
+            console.log('Аватарка в сайдбаре установлена');
         }
     
         // Создаем аватарку в навигации
         const navAvatar = document.getElementById('userAvatarNav');
-        if (navAvatar && !navAvatar.src) {
+        if (navAvatar) {
             // Если это div для аватарки (а не img)
-            if (navAvatar.classList.contains('avatar-small')) {
-                navAvatar.textContent = firstLetter;
+            if (navAvatar.classList && navAvatar.classList.contains('avatar-small')) {
+                navAvatar.innerHTML = firstLetter;
+            } else if (navAvatar.tagName === 'IMG' && !navAvatar.src) {
+                // Если это img без src, создаем текстовый аватар
+                const newAvatar = document.createElement('div');
+                newAvatar.className = 'avatar-small';
+                newAvatar.innerHTML = firstLetter;
+                navAvatar.parentNode.replaceChild(newAvatar, navAvatar);
             }
         }
     
         // Создаем аватарку в модальном окне профиля
-        const profileAvatar = document.getElementById('profileAvatarImg');
-        const profileAvatarPlaceholder = document.querySelector('.profile-avatar .avatar-placeholder');
+        const profileAvatarImg = document.getElementById('profileAvatarImg');
+        const profileAvatar = document.querySelector('.profile-avatar');
     
-        if (profileAvatar && !profileAvatar.src && profileAvatarPlaceholder) {
-            profileAvatarPlaceholder.textContent = firstLetter;
+        if (profileAvatar && !profileAvatar.querySelector('.avatar-placeholder')) {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'avatar-placeholder';
+            placeholder.innerHTML = firstLetter;
+            if (profileAvatarImg) profileAvatarImg.style.display = 'none';
+            profileAvatar.insertBefore(placeholder, profileAvatarImg);
         }
     },
 
