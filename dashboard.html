@@ -315,73 +315,11 @@
         </div>
     </div>
 
-    <!-- Админ панель -->
-    <div id="adminPanel" class="admin-panel" style="display: none;">
-        <div class="admin-panel-content">
-            <div class="admin-header">
-                <h3><i class="fas fa-shield-alt"></i> Админ Панель</h3>
-                <button class="close-admin" onclick="AdminTools.closeAdminPanel()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <!-- Статистика -->
-            <div id="adminStats" class="admin-stats"></div>
-
-            <!-- Поиск -->
-            <div class="search-section">
-                <div class="search-box">
-                    <input type="text" id="adminSearch" placeholder="Поиск по имени, email..." 
-                           onkeyup="AdminTools.searchUsers()">
-                    <i class="fas fa-search"></i>
-                </div>
-                <button class="btn-small" onclick="AdminTools.showAllUsers()">
-                    <i class="fas fa-list"></i> Все
-                </button>
-            </div>
-
-            <!-- Быстрые действия -->
-            <div class="quick-admin-actions">
-                <h4>Быстрые действия</h4>
-                <div class="action-buttons">
-                    <button class="admin-btn" onclick="AdminTools.createAdvancedTestUser()">
-                        <i class="fas fa-user-plus"></i> Создать пользователя
-                    </button>
-                    <button class="admin-btn" onclick="AdminTools.createMultipleTestUsers()">
-                        <i class="fas fa-users"></i> Создать несколько
-                    </button>
-                    <button class="admin-btn" onclick="AdminTools.showUserActivity()">
-                        <i class="fas fa-chart-bar"></i> Активность
-                    </button>
-                    <button class="admin-btn" onclick="AdminTools.exportData('json')">
-                        <i class="fas fa-download"></i> Экспорт JSON
-                    </button>
-                    <button class="admin-btn" onclick="AdminTools.exportData('csv')">
-                        <i class="fas fa-file-csv"></i> Экспорт CSV
-                    </button>
-                    <button class="admin-btn danger" onclick="AdminTools.clearDatabase()">
-                        <i class="fas fa-trash"></i> Очистить базу
-                    </button>
-                </div>
-            </div>
-
-            <!-- Результаты -->
-            <div id="adminOutput" class="admin-output">
-                <p class="placeholder">Используйте поиск или быстрые действия для работы с пользователями</p>
-            </div>
-        </div>
-    </div>
-
     <script src="js/storage.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/dashboard.js"></script>
     <script src="js/admin.js"></script>
 
-    <!-- Временная кнопка для отладки -->
-    <button onclick="AdminTools.toggleAdminPanel()" 
-            style="position: fixed; bottom: 20px; right: 20px; z-index: 10000; background: red; color: white; padding: 10px;">
-        🔧 Показать админку
-    </button>
 </body>
 </html>
