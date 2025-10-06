@@ -227,9 +227,20 @@ function welcome() {
                 <div class="form-group">
                     <input type="password" id="confirmPassword" placeholder="Подтвердите пароль" required>
                 </div>
-                <div class="form-group checkbox-group">
-                    <input type="checkbox" id="agreeTerms" required>
-                    <label for="agreeTerms">Я согласен с условиями использования и политикой конфиденциальности</label>
+                <!-- Обновленный блок с соглашениями -->
+                <div class="agreements-section">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <label for="agreeTerms">
+                            Я принимаю <a href="user-agreement.html" target="_blank">Пользовательское соглашение</a>
+                        </label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="agreePrivacy" required>
+                        <label for="agreePrivacy">
+                            Я согласен с <a href="privacy-policy.html" target="_blank">Политикой конфиденциальности</a>
+                        </label>
+                    </div>
                 </div>
                 <button type="submit" class="btn primary full-width">Зарегистрироваться</button>
             </form>
@@ -341,21 +352,25 @@ function welcome() {
                 const password = document.getElementById('registerPassword').value;
                 const confirmPassword = document.getElementById('confirmPassword').value;
                 const agreeTerms = document.getElementById('agreeTerms').checked;
-                
+                const agreePrivacy = document.getElementById('agreePrivacy').checked;
+    
                 try {
                     if (password !== confirmPassword) {
                         throw new Error('Пароли не совпадают!');
                     }
-                    
+        
                     if (!agreeTerms) {
-                        throw new Error('Необходимо согласие с условиями использования');
+                        throw new Error('Необходимо принять Пользовательское соглашение');
                     }
-                    
+        
+                    if (!agreePrivacy) {
+                        throw new Error('Необходимо согласие с Политикой конфиденциальности');
+                    }
+        
                     if (username && email && password) {
                         Auth.register(username, email, password);
                         alert('Регистрация успешна! Добро пожаловать, ' + username + '!');
                         closeModal('registerModal');
-                        // Редирект на dashboard
                         window.location.href = 'dashboard.html';
                     } else {
                         throw new Error('Заполните все поля');
