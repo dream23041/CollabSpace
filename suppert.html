@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Связь с поддержкой - CollabSpace</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .support-hero {
+            padding: 120px 0 80px;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+            text-align: center;
+        }
+        
+        .support-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .support-hero p {
+            font-size: 1.2rem;
+            color: #cccccc;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .support-content {
+            padding: 80px 0;
+            background: #1a1a1a;
+        }
+        
+        .support-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #252525;
+            padding: 3rem;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+        
+        .form-section {
+            margin-bottom: 2rem;
+        }
+        
+        .form-section h2 {
+            color: #4ecdc4;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #cccccc;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .name-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .verification-section {
+            background: rgba(78, 205, 196, 0.1);
+            border: 1px solid #4ecdc4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .verification-section h3 {
+            color: #4ecdc4;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .verification-code {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1rem;
+            align-items: end;
+        }
+        
+        .code-inputs {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .code-input {
+            width: 100%;
+            height: 50px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #ffffff;
+        }
+        
+        .code-input:focus {
+            border-color: #4ecdc4;
+            outline: none;
+        }
+        
+        .timer {
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        
+        .other-reason {
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        .other-reason.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .submit-section {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .success-message {
+            background: rgba(40, 202, 66, 0.1);
+            border: 1px solid #28ca42;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .success-icon {
+            font-size: 3rem;
+            color: #28ca42;
+            margin-bottom: 1rem;
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+            position: relative;
+        }
+        
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid #4ecdc4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .support-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .support-container {
+                padding: 2rem 1rem;
+                margin: 0 1rem;
+            }
+            
+            .name-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .code-inputs {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-code"></i>
+                <span>CollabSpace</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Главная</a>
+                <a href="about.html">О нас</a>
+                <a href="contact.html">Контакты</a>
+                <button class="login-btn" onclick="location.href='index.html'">Войти</button>
+                <button class="register-btn" onclick="location.href='index.html'">Регистрация</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Герой-секция -->
+    <section class="support-hero">
+        <div class="container">
+            <h1>Связь с поддержкой</h1>
+            <p>Мы готовы помочь с любыми вопросами и проблемами</p>
+        </div>
+    </section>
+
+    <!-- Основной контент -->
+    <section class="support-content">
+        <div class="container">
+            <div class="support-container">
+                <!-- Форма обратной связи -->
+                <form id="supportForm">
+                    <!-- Личная информация -->
+                    <div class="form-section">
+                        <h2>👤 Личная информация</h2>
+                        <div class="name-row">
+                            <div class="form-group">
+                                <label for="firstName">Имя *</label>
+                                <input type="text" id="firstName" name="firstName" required>
+                                <div class="error-message" id="firstNameError"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Фамилия *</label>
+                                <input type="text" id="lastName" name="lastName" required>
+                                <div class="error-message" id="lastNameError"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email адрес *</label>
+                            <input type="email" id="email" name="email" required placeholder="your@email.com">
+                            <div class="error-message" id="emailError"></div>
+                        </div>
+                    </div>
+
+                    <!-- Подтверждение email -->
+                    <div class="verification-section" id="verificationSection" style="display: none;">
+                        <h3>
+                            <i class="fas fa-shield-alt"></i>
+                            Подтверждение email
+                        </h3>
+                        <p>Мы отправили 6-значный код на ваш email. Введите его ниже для подтверждения.</p>
+                        
+                        <div class="code-inputs" id="codeInputs">
+                            <!-- Код будет сгенерирован JavaScript -->
+                        </div>
+                        
+                        <div class="timer" id="timer">02:00</div>
+                        <div class="error-message" id="codeError"></div>
+                        
+                        <button type="button" class="btn secondary" id="resendCode" style="margin-top: 1rem;">
+                            <i class="fas fa-redo"></i>
+                            Отправить код повторно
+                        </button>
+                    </div>
+
+                    <!-- Причина обращения -->
+                    <div class="form-section">
+                        <h2>📋 Причина обращения</h2>
+                        <div class="form-group">
+                            <label for="reason">Выберите причину *</label>
+                            <select id="reason" name="reason" required>
+                                <option value="">-- Выберите причину --</option>
+                                <option value="technical">Техническая проблема</option>
+                                <option value="bug">Сообщение об ошибке (баг)</option>
+                                <option value="feature">Предложение по функционалу</option>
+                                <option value="billing">Вопрос по оплате</option>
+                                <option value="account">Проблемы с аккаунтом</option>
+                                <option value="other">Другое</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group other-reason" id="otherReason">
+                            <label for="customReason">Укажите вашу причину *</label>
+                            <input type="text" id="customReason" name="customReason" placeholder="Опишите причину обращения">
+                        </div>
+                    </div>
+
+                    <!-- Сообщение -->
+                    <div class="form-section">
+                        <h2>💬 Ваше сообщение</h2>
+                        <div class="form-group">
+                            <label for="subject">Тема сообщения *</label>
+                            <input type="text" id="subject" name="subject" required placeholder="Краткое описание проблемы">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Подробное описание *</label>
+                            <textarea id="message" name="message" required placeholder="Опишите вашу проблему или вопрос максимально подробно..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Кнопка отправки -->
+                    <div class="submit-section">
+                        <button type="submit" class="btn primary" id="submitBtn" disabled>
+                            <i class="fas fa-paper-plane"></i>
+                            Отправить сообщение
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Сообщение об успехе -->
+                <div class="success-message" id="successMessage">
+                    <div class="success-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Сообщение отправлено!</h3>
+                    <p>Мы получили ваше сообщение и свяжемся с вами в ближайшее время.</p>
+                    <p>Обычно мы отвечаем в течение 24 часов.</p>
+                    <button class="btn primary" onclick="location.href='index.html'" style="margin-top: 1rem;">
+                        Вернуться на главную
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>CollabSpace</h3>
+                    <p>Платформа для совместной работы над кодом и документами в реальном времени</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Разделы</h4>
+                    <a href="index.html">Главная</a>
+                    <a href="about.html">О нас</a>
+                    <a href="contact.html">Контакты</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Поддержка</h4>
+                    <a href="support.html">Отправить сообщение</a>
+                    <a href="documentation.html">Документация</a>
+                    <a href="contact.html">Частые вопросы</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CollabSpace. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        class SupportForm {
+            constructor() {
+                this.verificationCode = '';
+                this.timer = null;
+                this.timeLeft = 120; // 2 минуты в секундах
+                this.isEmailVerified = false;
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.generateCodeInputs();
+            }
+
+            bindEvents() {
+                // Валидация email при изменении
+                document.getElementById('email').addEventListener('blur', () => {
+                    this.validateEmail();
+                });
+
+                // Обработка выбора причины
+                document.getElementById('reason').addEventListener('change', (e) => {
+                    this.handleReasonChange(e.target.value);
+                });
+
+                // Обработка ввода кода подтверждения
+                document.getElementById('codeInputs').addEventListener('input', (e) => {
+                    if (e.target.classList.contains('code-input')) {
+                        this.handleCodeInput(e);
+                    }
+                });
+
+                // Повторная отправка кода
+                document.getElementById('resendCode').addEventListener('click', () => {
+                    this.sendVerificationCode();
+                });
+
+                // Отправка формы
+                document.getElementById('supportForm').addEventListener('submit', (e) => {
+                    this.handleSubmit(e);
+                });
+
+                // Валидация формы при изменении
+                document.getElementById('supportForm').addEventListener('input', () => {
+                    this.validateForm();
+                });
+            }
+
+            validateEmail() {
+                const emailInput = document.getElementById('email');
+                const emailError = document.getElementById('emailError');
+                const email = emailInput.value.trim();
+
+                if (!email) {
+                    this.hideError(emailError);
+                    return false;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (!emailRegex.test(email)) {
+                    this.showError(emailError, 'Введите корректный email адрес');
+                    return false;
+                }
+
+                this.hideError(emailError);
+                
+                // Если email валиден и еще не подтвержден, отправляем код
+                if (!this.isEmailVerified) {
+                    this.sendVerificationCode();
+                }
+                
+                return true;
+            }
+
+            async sendVerificationCode() {
+                const email = document.getElementById('email').value.trim();
+                
+                if (!this.validateEmail()) {
+                    return;
+                }
+
+                // Генерируем 6-значный код
+                this.verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+                
+                // В реальном приложении здесь был бы запрос к серверу
+                console.log(Код подтверждения для ${email}: ${this.verificationCode});
+                
+                // Показываем секцию подтверждения
+                document.getElementById('verificationSection').style.display = 'block';
+                
+                // Запускаем таймер
+                this.startTimer();
+                
+                // Блокируем повторную отправку на 30 секунд
+                document.getElementById('resendCode').disabled = true;
+                setTimeout(() => {
+                    document.getElementById('resendCode').disabled = false;
+                }, 30000);
+                
+                // Показываем уведомление (в реальном приложении код отправляется на email)
+                alert(Код подтверждения отправлен на ${email}\n\nТестовый код: ${this.verificationCode}\n\nВ реальном приложении этот код придет на указанный email.);
+            }
+
+            startTimer() {
+                this.timeLeft = 120;
+                this.updateTimerDisplay();
+                
+                if (this.timer) {
+                    clearInterval(this.timer);
+                }
+                
+                this.timer = setInterval(() => {
+                    this.timeLeft--;
+                    this.updateTimerDisplay();
+                    
+                    if (this.timeLeft <= 0) {
+                        clearInterval(this.timer);
+                        document.getElementById('codeError').textContent = 'Время действия кода истекло';
+                        document.getElementById('codeError').classList.add('show');
+                    }
+                }, 1000);
+            }
+
+            updateTimerDisplay() {
+                const minutes = Math.floor(this.timeLeft / 60);
+                const seconds = this.timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')};
+            }
+
+            generateCodeInputs() {
+                const container = document.getElementById('codeInputs');
+                container.innerHTML = '';
+                
+                for (let i = 0; i < 6; i++) {
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.maxLength = 1;
+                    input.className = 'code-input';
+                    input.dataset.index = i;
+                    container.appendChild(input);
+                }
+                
+                // Фокус на первый инпут
+                container.firstChild.focus();
+            }
+
+            handleCodeInput(e) {
+                const input = e.target;
+                const index = parseInt(input.dataset.index);
+                const value = input.value;
+                
+                // Разрешаем только цифры
+                if (!/^\d?$/.test(value)) {
+                    input.value = '';
+                    return;
+                }
+                
+                // Переход к следующему полю
+                if (value && index < 5) {
+                    const nextInput = document.querySelector(.code-input[data-index="${index + 1}"]);
+                    nextInput.focus();
+                }
+                
+                // Проверка полного кода
+                this.checkVerificationCode();
+            }
+
+            checkVerificationCode() {
+                const inputs = document.querySelectorAll('.code-input');
+                let enteredCode = '';
+                
+                inputs.forEach(input => {
+                    enteredCode += input.value;
+                });
+                
+                if (enteredCode.length === 6) {
+                    if (enteredCode === this.verificationCode) {
+                        this.isEmailVerified = true;
+                        document.getElementById('codeError').classList.remove('show');
+                        document.getElementById('verificationSection').style.borderColor = '#28ca42';
+                        this.validateForm();
+                    } else {
+                        document.getElementById('codeError').textContent = 'Неверный код подтверждения';
+                        document.getElementById('codeError').classList.add('show');
+                    }
+                }
+            }
+
+            handleReasonChange(reason) {
+                const otherReasonSection = document.getElementById('otherReason');
+                const customReasonInput = document.getElementById('customReason');
+                
+                if (reason === 'other') {
+                    otherReasonSection.classList.add('show');
+                    customReasonInput.required = true;
+                } else {
+                    otherReasonSection.classList.remove('show');
+                    customReasonInput.required = false;
+                    customReasonInput.value = '';
+                }
+                
+                this.validateForm();
+            }
+
+            validateForm() {
+                const firstName = document.getElementById('firstName').value.trim();
+                const lastName = document.getElementById('lastName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const reason = document.getElementById('reason').value;
+                const subject = document.getElementById('subject').value.trim();
+                const message = document.getElementById('message').value.trim();
+                
+                let isValid = true;
+                
+                // Проверка обязательных полей
+                if (!firstName) {
+                    this.showError(document.getElementById('firstNameError'), 'Введите имя');
+                    isValid = false;
+                } else {
+                    this.hideError(document.getElementById('firstNameError'));
+                }
+                
+                if (!lastName) {
+                    this.showError(document.getElementById('lastNameError'), 'Введите фамилию');
+                    isValid = false;
+                } else {
+                    this.hideError(document.getElementById('lastNameError'));
+                }
+                
+                if (!this.validateEmail()) {
+                    isValid = false;
+                }
+                
+                if (!reason) {
+                    isValid = false;
+                }
+                
+                if (reason === 'other' && !document.getElementById('customReason').value.trim()) {
+                    isValid = false;
+                }
+                
+                if (!subject) {
+                    isValid = false;
+                }
+                
+                if (!message) {
+                    isValid = false;
+                }
+                
+                // Проверка подтверждения email
+                if (!this.isEmailVerified) {
+                    isValid = false;
+                }
+                
+                // Активация/деактивация кнопки отправки
+                document.getElementById('submitBtn').disabled = !isValid;
+                
+                return isValid;
+            }
+
+            async handleSubmit(e) {
+                e.preventDefault();
+                
+                if (!this.validateForm()) {
+                    alert('Пожалуйста, заполните все поля корректно и подтвердите email');
+                    return;
+                }
+                
+                const formData = {
+                    firstName: document.getElementById('firstName').value.trim(),
+                    lastName: document.getElementById('lastName').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    reason: document.getElementById('reason').value,
+                    customReason: document.getElementById('customReason').value.trim(),
+                    subject: document.getElementById('subject').value.trim(),
+                    message: document.getElementById('message').value.trim(),
+                    timestamp: new Date().toISOString()
+                };
+                
+                // Показываем индикатор загрузки
+                const submitBtn = document.getElementById('submitBtn');
+                submitBtn.classList.add('loading');
+                submitBtn.innerHTML = '<i class="fas fa-spinner"></i> Отправка...';
+                
+                try {
+                    // В реальном приложении здесь был бы fetch запрос к серверу
+                    await this.simulateApiCall(formData);
+                    
+                    // Показываем сообщение об успехе
+                    document.getElementById('supportForm').style.display = 'none';
+                    document.getElementById('successMessage').classList.add('show');
+                    
+                } catch (error) {
+                    alert('Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте еще раз.');
+                } finally {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Отправить сообщение';
+                }
+            }
+
+            simulateApiCall(formData) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        // В реальном приложении здесь отправляем данные на сервер
+                        console.log('Данные формы:', formData);
+                        
+                        // Создаем email сообщение
+                        const subject = CollabSpace Support: ${formData.reason} - ${formData.subject};
+                        const body = `
+Имя: ${formData.firstName} ${formData.lastName}
+Email: ${formData.email}
+Причина: ${formData.reason}${formData.customReason ? ` (${formData.customReason})` : ''}
+Тема: ${formData.subject}
+
+Сообщение:
+${formData.message}
+
+Отправлено: ${new Date().toLocaleString()}
+                        `.trim();
+                        
+                        // Открываем почтовый клиент
+                        window.open(mailto:dream23041@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)});
+                        
+                        resolve();
+                    }, 2000);
+                });
+            }
+
+            showError(element, message) {
+                element.textContent = message;
+                element.classList.add('show');
+            }
+
+            hideError(element) {
+                element.textContent = '';
+                element.classList.remove('show');
+            }
+        }
+
+        // Инициализация формы при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            new SupportForm();
+        });
+    </script>
+</body>
+</html>
