@@ -260,12 +260,8 @@
                 <i class="fas fa-code"></i>
                 <span>CollabSpace</span>
             </div>
-            <div class="nav-links">
-                <a href="index.html">Главная</a>
-                <a href="about.html">О нас</a>
-                <a href="contact.html">Контакты</a>
-                <button class="login-btn" onclick="location.href='index.html'">Войти</button>
-                <button class="register-btn" onclick="location.href='index.html'">Регистрация</button>
+            <div class="nav-links" id="navLinks">
+                <!-- Заполняется автоматически через navigation.js -->
             </div>
         </div>
     </nav>
@@ -419,15 +415,40 @@
             constructor() {
                 this.verificationCode = '';
                 this.timer = null;
-                this.timeLeft = 120; // 2 минуты в секундах
+                this.timeLeft = 120;
                 this.isEmailVerified = false;
+                this.currentUser = Auth.getCurrentUser();
                 this.init();
             }
 
             init() {
                 this.bindEvents();
                 this.generateCodeInputs();
+                this.autoFillUserData();
             }
+
+            autoFillUserData() {
+                if (this.currentUser) {
+                    // Разбиваем имя пользователя на имя и фамилию
+                    const username = this.currentUser.username;
+                    const nameParts = username.split('_');
+            
+                    document.getElementById('firstName').value = nameParts[0] || username;
+                    if (nameParts.length > 1) {
+                        document.getElementById('lastName').value = nameParts.slice(1).join(' ');
+                    }
+            
+                    document.getElementById('email').value = this.currentUser.email || '';
+            
+                    // Если пользователь авторизован, автоматически отправляем код подтверждения
+                    if (this.currentUser.email) {
+                        setTimeout(() => {
+                            this.sendVerificationCode();
+                        }, 1000);
+                    }
+                }
+            }
+
 
             bindEvents() {
                 // Валидация email при изменении
@@ -756,10 +777,41 @@ ${formData.message}
             }
         }
 
-        // Инициализация формы при загрузке страницы
+    // Инициализация формы при загрузке страницы
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/navigation.js"></script>
+    <script>
+        // Инициализация формы поддержки
         document.addEventListener('DOMContentLoaded', function() {
-            new SupportForm();
-        });
-    </script>
+            // Инициализируем навигацию
+            Navigation.initPublicPage();
+        
+            // Автозаполнение данных если пользователь авторизован
+            const currentUser = Auth.getCurrentUser();
+            if (currentUser) {
+                // Разбиваем имя пользователя на имя и фамилию
+                const username = currentUser.username;
+                const nameParts = username.split('_');
+            
+                document.getElementById('firstName').value = nameParts[0] || username;
+                if (nameParts.length > 1) {
+                    document.getElementById('lastName').value = nameParts.slice(1).join(' ');
+                }
+            
+                document.getElementById('email').value = currentUser.email || '';
+            
+                // Если email есть, сразу запускаем проверку
+            if (currentUser.email) {
+                setTimeout(() => {
+                    document.getElementById('email').dispatchEvent(new Event('blur'));
+                }, 500);
+            }
+        }
+        
+        // Инициализируем форму поддержки
+        new SupportForm();
+    });
+</script>
 </body>
 </html>
