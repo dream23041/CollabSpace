@@ -1,56 +1,97 @@
 // Умная навигационная система
 class Navigation {
-    static updateNavigation() {
+    static updateNavigation(compact = false) {
         const currentUser = Auth.getCurrentUser();
         const navLinks = document.getElementById('navLinks');
         
         if (!navLinks) return;
         
-        if (currentUser) {
-            // Навигация для авторизованного пользователя
-            navLinks.innerHTML = `
-                <a href="dashboard.html">Личный кабинет</a>
-                <a href="about.html">О нас</a>
-                <a href="support.html">Поддержка</a>
-                <a href="contact.html">Контакты</a>
-                <div class="user-nav">
-                    <span class="user-greeting">Привет, ${currentUser.username}!</span>
-                    <div class="avatar-small">${currentUser.username.charAt(0).toUpperCase()}</div>
-                    <div class="dropdown">
-                        <button class="user-btn" id="userMenuBtn">
-                            <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-menu" id="userDropdown">
-                            <a href="dashboard.html" class="dropdown-item">
-                                <i class="fas fa-home"></i>
-                                Личный кабинет
-                            </a>
-                            <a href="support.html" class="dropdown-item">
-                                <i class="fas fa-headset"></i>
-                                Поддержка
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item" onclick="Navigation.logout()">
-                                <i class="fas fa-sign-out-alt"></i>
-                                Выйти
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            this.bindUserMenuEvents();
+        if (compact && currentUser) {
+            // Компактная навигация для главной страницы
+            this.renderCompactNavigation(currentUser, navLinks);
+        } else if (currentUser) {
+            // Полная навигация для других страниц
+            this.renderFullNavigation(currentUser, navLinks);
         } else {
             // Навигация для неавторизованного пользователя
-            navLinks.innerHTML = `
-                <a href="index.html">Главная</a>
-                <a href="about.html">О нас</a>
-                <a href="support.html">Поддержка</a>
-                <a href="contact.html">Контакты</a>
-                <button class="login-btn" onclick="location.href='index.html'">Войти</button>
-                <button class="register-btn" onclick="location.href='index.html'">Регистрация</button>
-            `;
+            this.renderGuestNavigation(navLinks);
         }
+    }
+    
+    static renderCompactNavigation(currentUser, navLinks) {
+        navLinks.innerHTML = `
+            <a href="index.html">Главная</a>
+            <a href="about.html">О нас</a>
+            <a href="support.html">Поддержка</a>
+            <a href="contact.html">Контакты</a>
+            <div class="user-nav">
+                <span class="user-greeting">Привет, ${currentUser.username}</span>
+                <div class="avatar-small">${currentUser.username.charAt(0).toUpperCase()}</div>
+                <div class="dropdown">
+                    <div class="dropdown-menu">
+                        <a href="dashboard.html" class="dropdown-item">
+                            <i class="fas fa-home"></i>
+                            Личный кабинет
+                        </a>
+                        <a href="support.html" class="dropdown-item">
+                            <i class="fas fa-headset"></i>
+                            Поддержка
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="Navigation.logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Выйти
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    static renderFullNavigation(currentUser, navLinks) {
+        navLinks.innerHTML = `
+            <a href="dashboard.html">Личный кабинет</a>
+            <a href="about.html">О нас</a>
+            <a href="support.html">Поддержка</a>
+            <a href="contact.html">Контакты</a>
+            <div class="user-nav">
+                <span class="user-greeting">Привет, ${currentUser.username}!</span>
+                <div class="avatar-small">${currentUser.username.charAt(0).toUpperCase()}</div>
+                <div class="dropdown">
+                    <button class="user-btn" id="userMenuBtn">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu" id="userDropdown">
+                        <a href="dashboard.html" class="dropdown-item">
+                            <i class="fas fa-home"></i>
+                            Личный кабинет
+                        </a>
+                        <a href="support.html" class="dropdown-item">
+                            <i class="fas fa-headset"></i>
+                            Поддержка
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" onclick="Navigation.logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Выйти
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.bindUserMenuEvents();
+    }
+    
+    static renderGuestNavigation(navLinks) {
+        navLinks.innerHTML = `
+            <a href="index.html">Главная</a>
+            <a href="about.html">О нас</a>
+            <a href="support.html">Поддержка</a>
+            <a href="contact.html">Контакты</a>
+            <button class="login-btn">Войти</button>
+            <button class="register-btn">Регистрация</button>
+        `;
     }
     
     static bindUserMenuEvents() {
@@ -87,13 +128,27 @@ class Navigation {
         return !!currentUser;
     }
     
-    // Проверка для публичных страниц (просто обновляем навигацию)
+    // Для главной страницы
+    static initHomePage() {
+        this.updateNavigation(true); // compact mode
+        LoginHandler.init();
+        RegisterHandler.init();
+    }
+    
+    // Для публичных страниц
     static initPublicPage() {
-        this.updateNavigation();
+        this.updateNavigation(false);
+        LoginHandler.init();
+        RegisterHandler.init();
     }
 }
 
 // Автоматическое обновление навигации при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    Navigation.updateNavigation();
+    // Определяем тип страницы по URL
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+        Navigation.initHomePage();
+    } else {
+        Navigation.initPublicPage();
+    }
 });
