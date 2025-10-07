@@ -779,3 +779,55 @@ section {
 .agreements-section a:hover {
     text-decoration: underline;
 }
+
+/* Стили для валидации форм */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.field-hint {
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+    animation: slideDown 0.3s ease-in-out;
+}
+
+.form-group input.error {
+    border-color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.05);
+}
+
+.form-group input.success {
+    border-color: #28ca42;
+    background: rgba(40, 202, 66, 0.05);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Индикатор загрузки */
+.fa-spin {
+    animation: fa-spin 1s infinite linear;
+}
+
+@keyframes fa-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
